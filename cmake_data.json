@@ -1,0 +1,88 @@
+{
+  "min_cmake_version": "3.12",
+  "project_name": "json_parser_improved",
+
+  "default_cpp_standard": "11",
+
+  "allowed_c_standards": [
+    "11"
+  ],
+
+  "allowed_cpp_standards": [
+    "11"
+  ],
+
+  "output": {
+    "test": {
+      "type": "executable",
+      "base_file": "testing/test.cpp",
+      "r_source_dirs": [
+        "src",
+        "testing/src"
+      ],
+      "r_header_dirs": [
+        "include",
+        "testing/include"
+      ],
+      "r_include_dirs": [
+        "include",
+        "testing/include"
+      ],
+      "executable_output_dir": "bin"
+    },
+    "json_parser": {
+      "type": "executable",
+      "base_file": "main.cpp",
+      "r_source_dirs": [
+        "src"
+      ],
+      "r_header_dirs": [
+        "include"
+      ],
+      "r_include_dirs": [
+        "include"
+      ],
+      "executable_output_dir": "bin"
+    }
+  },
+
+  "imported_libs": {},
+  "link_libs": {},
+
+  "targets": {
+    "debug": {
+      "c_flags": [
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wconversion",
+        "-Wuninitialized",
+        "-pedantic",
+        "-pedantic-errors"
+      ],
+      "cpp_flags": [
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-Wconversion",
+        "-Wuninitialized",
+        "-pedantic",
+        "-pedantic-errors"
+      ]
+    },
+    "release": {
+      "c_flags": [
+        "-O3",
+        "-DNDEBUG",
+        "-s"
+      ],
+      "cpp_flags": [
+        "-O3",
+        "-DNDEBUG",
+        "-s"
+      ]
+    }
+  },
+
+  "default_target": "debug"
+}
