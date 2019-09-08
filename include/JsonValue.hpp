@@ -54,6 +54,7 @@ class JsonValue {
     inline JsonType getType() { return type; }
 
     void changeType(const JsonType);
+    bool boolNot();
     void resetValue();
     void setValue(const int);
     void setValue(const float);
@@ -68,6 +69,95 @@ class JsonValue {
     std::string& getAsString();
     JsonArray& getAsVector();
     JsonObject& getAsMap();
+
+    JsonValue& operator=(const JsonValue&);
+    JsonValue& operator=(const int);
+    JsonValue& operator=(const float);
+    JsonValue& operator=(const bool);
+    JsonValue& operator=(const std::string&);
+    JsonValue& operator=(const JsonArray&);
+    JsonValue& operator=(const JsonObject&);
+
+    bool operator==(const JsonValue&);
+    bool operator==(const int);
+    bool operator==(const float);
+    bool operator==(const bool);
+    bool operator==(const std::string&);
+    bool operator==(const JsonArray&);
+    bool operator==(const JsonObject&);
+
+    bool operator!=(const JsonValue&);
+    bool operator!=(const int);
+    bool operator!=(const float);
+    bool operator!=(const bool);
+    bool operator!=(const std::string&);
+    bool operator!=(const JsonArray&);
+    bool operator!=(const JsonObject&);
+
+    bool operator<(const JsonValue&);
+    bool operator<(const int);
+    bool operator<(const float);
+    bool operator<(const bool);
+
+    bool operator<=(const JsonValue&);
+    bool operator<=(const int);
+    bool operator<=(const float);
+    bool operator<=(const bool);
+
+    bool operator>(const JsonValue&);
+    bool operator>(const int);
+    bool operator>(const float);
+    bool operator>(const bool);
+
+    bool operator>=(const JsonValue&);
+    bool operator>=(const int);
+    bool operator>=(const float);
+    bool operator>=(const bool);
+
+    // Only for JsonValues which are holding a boolean
+    bool operator!();
+
+    JsonValue& operator+(const JsonValue&);
+    int operator+(const int);
+    float operator+(const float);
+    std::string operator+(const std::string&);
+
+    JsonValue& operator+=(const JsonValue&);
+    JsonValue& operator+=(const int);
+    JsonValue& operator+=(const float);
+    JsonValue& operator+=(const std::string&);
+
+    JsonValue& operator-(const JsonValue&);
+    int operator-(const int);
+    float operator-(const float);
+
+    JsonValue& operator-=(const JsonValue&);
+    JsonValue& operator-=(const int);
+    JsonValue& operator-=(const float);
+
+    JsonValue& operator*(const JsonValue&);
+    int operator*(const int);
+    float operator*(const float);
+
+    JsonValue& operator*=(const JsonValue&);
+    JsonValue& operator*=(const int);
+    JsonValue& operator*=(const float);
+
+    JsonValue& operator/(const JsonValue&);
+    int operator/(const int);
+    float operator/(const float);
+
+    JsonValue& operator/=(const JsonValue&);
+    JsonValue& operator/=(const int);
+    JsonValue& operator/=(const float);
+
+    JsonValue& operator%(const JsonValue&);
+    int operator%(const int);
+    float operator%(const float);
+
+    JsonValue& operator%=(const JsonValue&);
+    JsonValue& operator%=(const int);
+    JsonValue& operator%=(const float);
 
   private:
     void destroyCurrentValue();
