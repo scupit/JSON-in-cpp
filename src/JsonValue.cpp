@@ -46,6 +46,25 @@ JsonValue::JsonValue(const JsonObject& newObjectValue)
   value.objectValue = new JsonObject(newObjectValue);
 }
 
+JsonValue::JsonValue(const JsonValue& other)
+: type(other.type), value({})
+{
+  switch (other.type) {
+    case JsonType::JSTRING:
+      value.stringValue = new std::string(*other.value.stringValue);
+      break;
+    case JsonType::JARRAY:
+      value.arrayValue = new JsonArray(*other.value.arrayValue);
+      break;
+    case JsonType::JOBJECT:
+      value.objectValue = new JsonObject(*other.value.objectValue);
+      break;
+    default:
+      value = other.value;
+      break;
+  }
+}
+
 JsonValue::~JsonValue() {
   destroyCurrentValue();
 }

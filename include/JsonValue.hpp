@@ -48,6 +48,7 @@ class JsonValue {
     JsonValue(const std::string&);
     JsonValue(const JsonArray&);
     JsonValue(const JsonObject&);
+    JsonValue(const JsonValue&);
     ~JsonValue();
 
     inline JsonType getType() { return type; }
