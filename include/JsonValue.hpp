@@ -46,6 +46,8 @@ class JsonValue {
     JsonValue(const float);
     JsonValue(const bool);
     JsonValue(const std::string&);
+    JsonValue(const JsonArray&);
+    JsonValue(const JsonObject&);
     ~JsonValue();
 
     inline JsonType getType() { return type; }
@@ -56,6 +58,8 @@ class JsonValue {
     void setValue(const float);
     void setValue(const bool);
     void setValue(const std::string&);
+    void setValue(const JsonArray&);
+    void setValue(const JsonObject&);
 
     int getAsInt();
     float getAsFloat();

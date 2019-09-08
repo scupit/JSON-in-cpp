@@ -34,6 +34,18 @@ JsonValue::JsonValue(const std::string& newStringValue)
   value.stringValue = new std::string(newStringValue);
 }
 
+JsonValue::JsonValue(const JsonArray& newArrayValue)
+: type(JsonType::JARRAY), value({})
+{
+  value.arrayValue = new JsonArray(newArrayValue);
+}
+
+JsonValue::JsonValue(const JsonObject& newObjectValue)
+: type(JsonType::JOBJECT), value({})
+{
+  value.objectValue = new JsonObject(newObjectValue);
+}
+
 JsonValue::~JsonValue() {
   destroyCurrentValue();
 }
@@ -79,6 +91,18 @@ void JsonValue::setValue(const std::string& newStringValue) {
   destroyCurrentValue();
   value.stringValue = new std::string(newStringValue);
   type = JsonType::JSTRING;
+}
+
+void JsonValue::setValue(const JsonArray& newArrayValue) {
+  destroyCurrentValue();
+  value.arrayValue = new JsonArray(newArrayValue);
+  type = JsonType::JARRAY;
+}
+
+void JsonValue::setValue(const JsonObject& newObjectValue) {
+  destroyCurrentValue();
+  value.objectValue = new JsonObject(newObjectValue);
+  type = JsonType::JOBJECT;
 }
 
 int JsonValue::getAsInt() {
