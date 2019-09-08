@@ -96,7 +96,7 @@ float JsonValue::getAsFloat() {
 }
 
 bool JsonValue::getAsBool() {
-  if (type != JsonType::JFLOAT) {
+  if (type != JsonType::JBOOL) {
     throw std::runtime_error("ERROR: Tried to get JsonValue value as bool, when it is not type JBOOL");
   }
   return value.boolValue;
@@ -153,7 +153,7 @@ void JsonValue::typeChangeHelper(const JsonType newType) {
       value.arrayValue = new JsonArray();
       break;
     case JsonType::JBOOL:
-      value.boolValue = true;
+      value.boolValue = false;
       break;
     case JsonType::JFLOAT:
       value.floatValue = 0.0f;

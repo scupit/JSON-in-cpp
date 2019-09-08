@@ -3,6 +3,7 @@
 
 #include "JsonValue.hpp"
 
+void testBool(JsonValue&);
 void testFloat(JsonValue&);
 void testInt(JsonValue&);
 void testString(JsonValue&);

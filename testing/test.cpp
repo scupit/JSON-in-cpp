@@ -9,6 +9,7 @@
 int main(void) {
   JsonValue jVal(JsonType::JFLOAT);
 
+  printTestGroup("Bool values", testBool, jVal);
   printTestGroup("Float values", testFloat, jVal);
   printTestGroup("Int values", testInt, jVal);
   printTestGroup("String values", testString, jVal);

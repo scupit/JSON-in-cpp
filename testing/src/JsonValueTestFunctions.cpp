@@ -2,6 +2,68 @@
 
 #include <stdexcept>
 
+void testBool(JsonValue& jVal) {
+  const bool expectedBoolValue = true;
+  jVal.setValue(expectedBoolValue);
+
+  printTestResultStatus(
+    "Bool value assignment",
+    jVal.getAsBool() == expectedBoolValue
+  );
+
+  printTestResultStatus(
+    "Expected JBOOL type",
+    jVal.getType() == JsonType::JBOOL
+  );
+
+  jVal.changeType(JsonType::JBOOL);
+
+  printTestResultStatus(
+    "Changing type from JBOOL to JBOOL",
+    jVal.getAsBool() == expectedBoolValue && jVal.getType() == JsonType::JBOOL
+  );
+
+  printTestResultStatus(
+    "Getting value using bool getter",
+    jVal.getAsBool() == expectedBoolValue
+  );
+
+  try {
+    int temp = jVal.getAsInt();
+    printTestResultStatus(
+      "Using getter of wrong type",
+      false
+    );
+  }
+  catch (std::runtime_error& e) {
+    printTestResultStatus(
+      "Using getter of wrong type",
+      true
+    );
+  }
+
+  jVal.resetValue();
+
+  printTestResultStatus(
+    "Resetting bool value",
+    jVal.getAsBool() == false
+  );
+
+  jVal.changeType(JsonType::JSTRING);
+
+  printTestResultStatus(
+    "Changing type from JBOOL to JSTRING",
+    jVal.getType() == JsonType::JSTRING
+  );
+
+  jVal.changeType(JsonType::JBOOL);
+
+  printTestResultStatus(
+    "Changing back to JBOOL from JSTRING",
+    jVal.getType() == JsonType::JBOOL && jVal.getAsBool() == false
+  );
+}
+
 void testFloat(JsonValue& jVal) {
   const float expectedFloatValue = 10.2f;
   jVal.setValue(expectedFloatValue);
