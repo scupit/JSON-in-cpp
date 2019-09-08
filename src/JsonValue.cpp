@@ -13,13 +13,19 @@ JsonValue::JsonValue(const JsonType type)
 }
 
 JsonValue::JsonValue(const int newIntValue)
-: type(JsonType::JINT), value({new int(newIntValue)})
+: type(JsonType::JINT), value({newIntValue})
 { }
 
 JsonValue::JsonValue(const float newFloatValue)
 : type(JsonType::JFLOAT), value({})
 {
-  value.floatValue = new float(newFloatValue);
+  value.floatValue = newFloatValue;
+}
+
+JsonValue::JsonValue(const bool newBoolValue)
+: type(JsonType::JBOOL), value({})
+{
+  value.boolValue = newBoolValue;
 }
 
 JsonValue::JsonValue(const std::string& newStringValue)
@@ -30,28 +36,6 @@ JsonValue::JsonValue(const std::string& newStringValue)
 
 JsonValue::~JsonValue() {
   destroyCurrentValue();
-}
-
-void* JsonValue::getValue() {
-  switch (type) {
-    case JsonType::JARRAY:
-      return value.arrayValue;
-      break;
-    case JsonType::JOBJECT:
-      return value.objectValue;
-      break;
-    case JsonType::JSTRING:
-      return value.stringValue;
-      break;
-    case JsonType::JINT:
-      return value.intValue;
-      break;
-    case JsonType::JFLOAT:
-      return value.floatValue;
-      break;
-    default:
-      return nullptr;
-  }
 }
 
 void JsonValue::changeType(const JsonType newType) {
@@ -68,25 +52,27 @@ void JsonValue::resetValue() {
 }
 
 void JsonValue::setValue(const int newIntValue) {
-  if (type == JsonType::JINT && value.intValue) {
-    *value.intValue = newIntValue;
-  }
-  else {
+  if (type != JsonType::JINT) {
     destroyCurrentValue();
-    value.intValue = new int(newIntValue);
   }
+  value.intValue = newIntValue;
   type = JsonType::JINT;
 }
 
 void JsonValue::setValue(const float newFloatValue) {
-  if (type == JsonType::JFLOAT && value.floatValue) {
-    *value.floatValue = newFloatValue;
-  }
-  else {
+  if (type != JsonType::JFLOAT) {
     destroyCurrentValue();
-    value.floatValue = new float(newFloatValue);
   }
+  value.floatValue = newFloatValue;
   type = JsonType::JFLOAT;
+}
+
+void JsonValue::setValue(const bool newBoolValue) {
+  if (type != JsonType::JBOOL) {
+    destroyCurrentValue();
+  }
+  value.boolValue = newBoolValue;
+  type = JsonType::JBOOL;
 }
 
 void JsonValue::setValue(const std::string& newStringValue) {
@@ -99,14 +85,21 @@ int JsonValue::getAsInt() {
   if (type != JsonType::JINT) {
     throw std::runtime_error("ERROR: Tried to get JsonValue value as int, when it is not type JINT");
   }
-  return *value.intValue;
+  return value.intValue;
 }
 
 float JsonValue::getAsFloat() {
   if (type != JsonType::JFLOAT) {
     throw std::runtime_error("ERROR: Tried to get JsonValue value as float, when it is not type JFLOAT");
   }
-  return *value.floatValue;
+  return value.floatValue;
+}
+
+bool JsonValue::getAsBool() {
+  if (type != JsonType::JFLOAT) {
+    throw std::runtime_error("ERROR: Tried to get JsonValue value as bool, when it is not type JBOOL");
+  }
+  return value.boolValue;
 }
 
 std::string& JsonValue::getAsString() {
@@ -130,28 +123,17 @@ JsonObject& JsonValue::getAsMap() {
   return *value.objectValue;
 }
 
+// Only heap allocated values need to be destroyed.
 void JsonValue::destroyCurrentValue() {
   switch (type) {
     case JsonType::JSTRING:
-      if (value.stringValue) {
-        delete value.stringValue;
-      }
+      delete value.stringValue;
       break;
     case JsonType::JOBJECT:
       delete value.objectValue;
       break;
     case JsonType::JARRAY:
       delete value.arrayValue;
-      break;
-    case JsonType::JINT:
-      if (value.intValue) {
-        delete value.intValue;
-      }
-      break;
-    case JsonType::JFLOAT:
-      if (value.floatValue) {
-        delete value.floatValue;
-      }
       break;
     default:
       break;
@@ -162,7 +144,7 @@ void JsonValue::destroyCurrentValue() {
 void JsonValue::typeChangeHelper(const JsonType newType) {
   switch (type) {
     case JsonType::JSTRING:
-      value.stringValue = nullptr;
+      value.stringValue = new std::string("");
       break;
     case JsonType::JOBJECT:
       value.objectValue = new JsonObject();
@@ -170,14 +152,16 @@ void JsonValue::typeChangeHelper(const JsonType newType) {
     case JsonType::JARRAY:
       value.arrayValue = new JsonArray();
       break;
+    case JsonType::JBOOL:
+      value.boolValue = true;
+      break;
     case JsonType::JFLOAT:
-      value.floatValue = new float(0.0f);
+      value.floatValue = 0.0f;
       break;
     case JsonType::JINT:
-      value.intValue = new int(0);
+      value.intValue = 0;
       break;
     default:
       break;
   }
 }
-

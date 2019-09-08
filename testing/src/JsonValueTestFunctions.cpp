@@ -8,7 +8,7 @@ void testFloat(JsonValue& jVal) {
 
   printTestResultStatus(
     "Float value assignment",
-    *static_cast<float*>(jVal.getValue()) == expectedFloatValue
+    jVal.getAsFloat() == expectedFloatValue
   );
 
   printTestResultStatus(
@@ -20,7 +20,7 @@ void testFloat(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing type from JFLOAT to JFLOAT",
-    *static_cast<float*>(jVal.getValue()) == expectedFloatValue && jVal.getType() == JsonType::JFLOAT
+    jVal.getAsFloat() == expectedFloatValue && jVal.getType() == JsonType::JFLOAT
   );
 
   printTestResultStatus(
@@ -46,7 +46,7 @@ void testFloat(JsonValue& jVal) {
 
   printTestResultStatus(
     "Resetting float value",
-    *static_cast<float*>(jVal.getValue()) == 0.0f
+    jVal.getAsFloat() == 0.0f
   );
 
   jVal.changeType(JsonType::JSTRING);
@@ -60,7 +60,7 @@ void testFloat(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JFLOAT from JSTRING",
-    jVal.getType() == JsonType::JFLOAT && *static_cast<float*>(jVal.getValue()) == 0.0f
+    jVal.getType() == JsonType::JFLOAT && jVal.getAsFloat() == 0.0f
   );
 }
 
@@ -70,7 +70,7 @@ void testInt(JsonValue& jVal) {
 
   printTestResultStatus(
     "Int value assignment",
-    *static_cast<int*>(jVal.getValue()) == expectedIntValue
+    jVal.getAsInt() == expectedIntValue
   );
 
   printTestResultStatus(
@@ -82,7 +82,7 @@ void testInt(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing type from JINT to JINT",
-    *static_cast<int*>(jVal.getValue()) == expectedIntValue && jVal.getType() == JsonType::JINT
+    jVal.getAsInt() == expectedIntValue && jVal.getType() == JsonType::JINT
   );
 
   printTestResultStatus(
@@ -108,7 +108,7 @@ void testInt(JsonValue& jVal) {
 
   printTestResultStatus(
     "Resetting int value",
-    *static_cast<int*>(jVal.getValue()) == 0
+    jVal.getAsInt() == 0
   );
 
   jVal.changeType(JsonType::JSTRING);
@@ -122,7 +122,7 @@ void testInt(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JINT from JSTRING",
-    jVal.getType() == JsonType::JINT && *static_cast<int*>(jVal.getValue()) == 0
+    jVal.getType() == JsonType::JINT && jVal.getAsInt() == 0
   );
 }
   
@@ -132,7 +132,7 @@ void testString(JsonValue& jVal) {
 
   printTestResultStatus(
     "String value assignment",
-    *static_cast<std::string*>(jVal.getValue()) == expectedStringValue
+    jVal.getAsString() == expectedStringValue
   );
 
   printTestResultStatus(
@@ -144,7 +144,7 @@ void testString(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing type from JSTRING to JSTRING",
-    *static_cast<std::string*>(jVal.getValue()) == expectedStringValue && jVal.getType() == JsonType::JSTRING
+    jVal.getAsString() == expectedStringValue && jVal.getType() == JsonType::JSTRING
   );
 
   printTestResultStatus(
@@ -170,7 +170,7 @@ void testString(JsonValue& jVal) {
 
   printTestResultStatus(
     "Resetting string value",
-    static_cast<std::string*>(jVal.getValue()) == nullptr
+    jVal.getAsString() == ""
   );
 
   jVal.changeType(JsonType::JSTRING);
@@ -184,7 +184,7 @@ void testString(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JSTRING from JSTRING",
-    jVal.getType() == JsonType::JSTRING && static_cast<std::string*>(jVal.getValue()) == nullptr
+    jVal.getType() == JsonType::JSTRING && jVal.getAsString() == ""
   );
 }
 
@@ -196,12 +196,12 @@ void testArray(JsonValue& jVal) {
     jVal.getType() == JsonType::JARRAY
   );
 
-  static_cast<JsonArray*>(jVal.getValue())->emplace_back(10);
-  static_cast<JsonArray*>(jVal.getValue())->emplace_back(10.2f);
+  jVal.getAsVector().emplace_back(10);
+  jVal.getAsVector().emplace_back(10.2f);
 
   printTestResultStatus(
     "Adding two JsonValues to the array (array size)",
-    static_cast<JsonArray*>(jVal.getValue())->size() == 2
+    jVal.getAsVector().size() == 2
   );
 
   printTestResultStatus(
@@ -211,29 +211,29 @@ void testArray(JsonValue& jVal) {
 
   printTestResultStatus(
     "Adding two JsonValues to the array (item 1 type)",
-    static_cast<JsonArray*>(jVal.getValue())->at(0).getType() == JsonType::JINT
+    jVal.getAsVector().at(0).getType() == JsonType::JINT
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the array (item 1 type)",
-    *static_cast<int*>(static_cast<JsonArray*>(jVal.getValue())->at(0).getValue()) == 10
+    jVal.getAsVector().at(0).getAsInt() == 10
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the array (item 2 type)",
-    static_cast<JsonArray*>(jVal.getValue())->at(1).getType() == JsonType::JFLOAT
+    jVal.getAsVector().at(1).getType() == JsonType::JFLOAT
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the array (item 2 value)",
-    *static_cast<float*>(static_cast<JsonArray*>(jVal.getValue())->at(1).getValue()) == 10.2f
+    jVal.getAsVector().at(1).getAsFloat() == 10.2f
   );
 
   jVal.changeType(JsonType::JARRAY);
 
   printTestResultStatus(
     "Changing type from JARRAY to JARRAY (correct length)",
-    static_cast<JsonArray*>(jVal.getValue())->size() == 2
+    jVal.getAsVector().size() == 2
   );
 
   printTestResultStatus(
@@ -264,7 +264,7 @@ void testArray(JsonValue& jVal) {
 
   printTestResultStatus(
     "Resetting int value",
-    static_cast<JsonArray*>(jVal.getValue())->empty()
+    jVal.getAsVector().empty()
   );
 
   jVal.changeType(JsonType::JARRAY);
@@ -278,7 +278,7 @@ void testArray(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JARRAY from JARRAY",
-    jVal.getType() == JsonType::JARRAY && static_cast<JsonArray*>(jVal.getValue())->empty()
+    jVal.getType() == JsonType::JARRAY && jVal.getAsVector().empty()
   );
 }
 
@@ -290,12 +290,12 @@ void testObject(JsonValue& jVal) {
     jVal.getType() == JsonType::JOBJECT
   );
 
-  (*static_cast<JsonObject*>(jVal.getValue()))["theInt"] = JsonValue(10);
-  (*static_cast<JsonObject*>(jVal.getValue()))["theFloat"] = JsonValue(10.2f);
+  jVal.getAsMap()["theInt"] = JsonValue(10);
+  jVal.getAsMap()["theFloat"] = JsonValue(10.2f);
 
   printTestResultStatus(
     "Adding two JsonValues to the map (size)",
-    static_cast<JsonObject*>(jVal.getValue())->size() == 2
+    jVal.getAsMap().size() == 2
   );
 
   printTestResultStatus(
@@ -305,29 +305,29 @@ void testObject(JsonValue& jVal) {
 
   printTestResultStatus(
     "Adding two JsonValues to the map (item 1 type)",
-    static_cast<JsonObject*>(jVal.getValue())->at("theInt").getType() == JsonType::JINT
+    jVal.getAsMap().at("theInt").getType() == JsonType::JINT
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the map (item 1 value)",
-    *static_cast<int*>(static_cast<JsonObject*>(jVal.getValue())->at("theInt").getValue()) == 10
+    jVal.getAsMap().at("theInt").getAsInt() == 10
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the map (item 2 type)",
-    static_cast<JsonObject*>(jVal.getValue())->at("theFloat").getType() == JsonType::JFLOAT
+    jVal.getAsMap().at("theFloat").getType() == JsonType::JFLOAT
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the map (item 2 value)",
-    *static_cast<float*>(static_cast<JsonObject*>(jVal.getValue())->at("theFloat").getValue()) == 10.2f
+    jVal.getAsMap().at("theFloat").getAsFloat() == 10.2f
   );
 
   jVal.changeType(JsonType::JOBJECT);
 
   printTestResultStatus(
     "Changing type from JOBJECT to JOBJECT (correct size)",
-    static_cast<JsonObject*>(jVal.getValue())->size() == 2
+    jVal.getAsMap().size() == 2
   );
 
   printTestResultStatus(
@@ -358,7 +358,7 @@ void testObject(JsonValue& jVal) {
 
   printTestResultStatus(
     "Resetting int value",
-    static_cast<JsonObject*>(jVal.getValue())->empty()
+    jVal.getAsMap().empty()
   );
 
   jVal.changeType(JsonType::JOBJECT);
@@ -372,6 +372,6 @@ void testObject(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JOBJECT from JOBJECT",
-    jVal.getType() == JsonType::JOBJECT && static_cast<JsonObject*>(jVal.getValue())->empty()
+    jVal.getType() == JsonType::JOBJECT && jVal.getAsMap().empty()
   );
 }

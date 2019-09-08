@@ -11,6 +11,7 @@ enum class JsonType {
   JSTRING,
   JINT,
   JFLOAT,
+  JBOOL,
   JNULL,
   JINVALID
 };
@@ -24,8 +25,9 @@ typedef std::unordered_map<std::string, JsonValue> JsonObject;
 // Union containing possible data for each type other than JNULL.
 // No need to include null item since it can be inferred from the type anyways.
 union Value {
-  int* intValue;
-  float* floatValue;
+  int intValue;
+  float floatValue;
+  bool boolValue;
   std::string* stringValue;
   JsonArray* arrayValue;
   JsonObject* objectValue;
@@ -42,20 +44,22 @@ class JsonValue {
     JsonValue(const JsonType);
     JsonValue(const int);
     JsonValue(const float);
+    JsonValue(const bool);
     JsonValue(const std::string&);
     ~JsonValue();
 
     inline JsonType getType() { return type; }
-    void* getValue();
 
     void changeType(const JsonType);
     void resetValue();
     void setValue(const int);
     void setValue(const float);
+    void setValue(const bool);
     void setValue(const std::string&);
 
     int getAsInt();
     float getAsFloat();
+    bool getAsBool();
     std::string& getAsString();
     JsonArray& getAsVector();
     JsonObject& getAsMap();

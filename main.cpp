@@ -8,7 +8,7 @@ int main(void) {
   JsonValue val(JsonType::JFLOAT);
   val.setValue(10.5f);
   
-  cout << *static_cast<float*>(val.getValue()) << endl;
+  cout << val.getAsFloat() << endl;
 
   return 0;
 }
