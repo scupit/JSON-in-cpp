@@ -1,5 +1,7 @@
 #include "JsonValue.hpp"
 
+#include <stdexcept>
+
 JsonValue::JsonValue()
 : type(JsonType::JNULL), value({})
 { }
@@ -91,6 +93,41 @@ void JsonValue::setValue(const std::string& newStringValue) {
   destroyCurrentValue();
   value.stringValue = new std::string(newStringValue);
   type = JsonType::JSTRING;
+}
+
+int JsonValue::getAsInt() {
+  if (type != JsonType::JINT) {
+    throw std::runtime_error("ERROR: Tried to get JsonValue value as int, when it is not type JINT");
+  }
+  return *value.intValue;
+}
+
+float JsonValue::getAsFloat() {
+  if (type != JsonType::JFLOAT) {
+    throw std::runtime_error("ERROR: Tried to get JsonValue value as float, when it is not type JFLOAT");
+  }
+  return *value.floatValue;
+}
+
+std::string& JsonValue::getAsString() {
+  if (type != JsonType::JSTRING) {
+    throw std::runtime_error("ERROR: Tried to get JsonValue value as std::string, when it is not type JSTRING.");
+  }
+  return *value.stringValue;
+}
+
+JsonArray& JsonValue::getAsVector() {
+  if (type != JsonType::JARRAY) {
+    throw std::runtime_error("ERROR: Tried to get JsonValue value as JsonArray (std::vector), when it is not type JARRAY.");
+  }
+  return *value.arrayValue;
+}
+
+JsonObject& JsonValue::getAsMap() {
+  if (type != JsonType::JOBJECT) {
+    throw std::runtime_error("ERROR: Tried to get JsonValue value as JsonObject (std::unordered_map), when it is not type JOBJECT.");
+  }
+  return *value.objectValue;
 }
 
 void JsonValue::destroyCurrentValue() {

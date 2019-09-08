@@ -54,6 +54,12 @@ class JsonValue {
     void setValue(const float);
     void setValue(const std::string&);
 
+    int getAsInt();
+    float getAsFloat();
+    std::string& getAsString();
+    JsonArray& getAsVector();
+    JsonObject& getAsMap();
+
   private:
     void destroyCurrentValue();
     void typeChangeHelper(const JsonType);

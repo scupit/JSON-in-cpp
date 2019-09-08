@@ -1,5 +1,7 @@
 #include "TestPrinterFunctions.hpp"
 
+#include <stdexcept>
+
 void testFloat(JsonValue& jVal) {
   const float expectedFloatValue = 10.2f;
   jVal.setValue(expectedFloatValue);
@@ -20,6 +22,25 @@ void testFloat(JsonValue& jVal) {
     "Changing type from JFLOAT to JFLOAT",
     *static_cast<float*>(jVal.getValue()) == expectedFloatValue && jVal.getType() == JsonType::JFLOAT
   );
+
+  printTestResultStatus(
+    "Getting value using float getter",
+    jVal.getAsFloat() == expectedFloatValue
+  );
+
+  try {
+    int temp = jVal.getAsInt();
+    printTestResultStatus(
+      "Using getter of wrong type",
+      false
+    );
+  }
+  catch (std::runtime_error& e) {
+    printTestResultStatus(
+      "Using getter of wrong type",
+      true
+    );
+  }
 
   jVal.resetValue();
 
@@ -64,6 +85,25 @@ void testInt(JsonValue& jVal) {
     *static_cast<int*>(jVal.getValue()) == expectedIntValue && jVal.getType() == JsonType::JINT
   );
 
+  printTestResultStatus(
+    "Getting value using int getter",
+    jVal.getAsInt() == expectedIntValue
+  );
+
+  try {
+    std::string& temp = jVal.getAsString();
+    printTestResultStatus(
+      "Using getter of wrong type",
+      false
+    );
+  }
+  catch (std::runtime_error& e) {
+    printTestResultStatus(
+      "Using getter of wrong type",
+      true
+    );
+  }
+
   jVal.resetValue();
 
   printTestResultStatus(
@@ -106,6 +146,25 @@ void testString(JsonValue& jVal) {
     "Changing type from JSTRING to JSTRING",
     *static_cast<std::string*>(jVal.getValue()) == expectedStringValue && jVal.getType() == JsonType::JSTRING
   );
+
+  printTestResultStatus(
+    "Getting value using std::string getter",
+    jVal.getAsString() == expectedStringValue
+  );
+
+  try {
+    JsonArray& temp = jVal.getAsVector();
+    printTestResultStatus(
+      "Using getter of wrong type",
+      false
+    );
+  }
+  catch (std::runtime_error& e) {
+    printTestResultStatus(
+      "Using getter of wrong type",
+      true
+    );
+  }
 
   jVal.resetValue();
 
@@ -182,6 +241,25 @@ void testArray(JsonValue& jVal) {
     jVal.getType() == JsonType::JARRAY
   );
 
+  printTestResultStatus(
+    "Getting value using JsonArray getter",
+    jVal.getAsVector().size() == 2
+  );
+
+  try {
+    JsonObject& temp = jVal.getAsMap();
+    printTestResultStatus(
+      "Using getter of wrong type",
+      false
+    );
+  }
+  catch (std::runtime_error& e) {
+    printTestResultStatus(
+      "Using getter of wrong type",
+      true
+    );
+  }
+
   jVal.resetValue();
 
   printTestResultStatus(
@@ -256,6 +334,25 @@ void testObject(JsonValue& jVal) {
     "Changing type from JOBJECT to JOBJECT (JOBJECT type)",
     jVal.getType() == JsonType::JOBJECT
   );
+
+  printTestResultStatus(
+    "Getting value using JsonArray getter",
+    jVal.getAsMap().size() == 2
+  );
+
+  try {
+    float temp = jVal.getAsFloat();
+    printTestResultStatus(
+      "Using getter of wrong type",
+      false
+    );
+  }
+  catch (std::runtime_error& e) {
+    printTestResultStatus(
+      "Using getter of wrong type",
+      true
+    );
+  }
 
   jVal.resetValue();
 
