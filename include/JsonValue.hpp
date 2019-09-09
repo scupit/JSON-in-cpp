@@ -70,6 +70,8 @@ class JsonValue {
     JsonArray& getAsVector();
     JsonObject& getAsMap();
 
+    bool typeMatches(const JsonValue&) const;
+
     JsonValue& operator=(const JsonValue&);
     JsonValue& operator=(const int);
     JsonValue& operator=(const float);

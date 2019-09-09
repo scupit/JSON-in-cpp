@@ -166,6 +166,60 @@ JsonObject& JsonValue::getAsMap() {
   return *value.objectValue;
 }
 
+bool JsonValue::typeMatches(const JsonValue& other) const {
+  return type == other.type;
+}
+
+JsonValue& JsonValue::operator=(const JsonValue& other) {
+  switch (other.type) {
+    case JsonType::JSTRING:
+      setValue(*other.value.stringValue);
+      break;
+    case JsonType::JARRAY:
+      setValue(*other.value.arrayValue);
+      break;
+    case JsonType::JOBJECT:
+      setValue(*other.value.objectValue);
+      break;
+    case JsonType::JINT:
+      setValue(other.value.intValue);
+      break;
+    case JsonType::JFLOAT:
+      setValue(other.value.floatValue);
+      break;
+    case JsonType::JBOOL:
+      setValue(other.value.boolValue);
+      break;
+    default:
+      type = other.type;
+      break;
+  }
+}
+
+JsonValue& JsonValue::operator=(const int newIntValue) {
+  setValue(newIntValue);
+}
+
+JsonValue& JsonValue::operator=(const float newFloatValue) {
+  setValue(newFloatValue);
+}
+
+JsonValue& JsonValue::operator=(const bool newBoolValue) {
+  setValue(newBoolValue);
+}
+
+JsonValue& JsonValue::operator=(const std::string& newStringValue) {
+  setValue(newStringValue);
+}
+
+JsonValue& JsonValue::operator=(const JsonArray& newArrayValue) {
+  setValue(newArrayValue);
+}
+
+JsonValue& JsonValue::operator=(const JsonObject& newObjectValue) {
+  setValue(newObjectValue);
+}
+
 // Only heap allocated values need to be destroyed.
 void JsonValue::destroyCurrentValue() {
   switch (type) {
