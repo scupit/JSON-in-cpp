@@ -40,11 +40,12 @@ class JsonValue {
     Value value;
 
   public:
-    JsonValue();
+    JsonValue(const std::nullptr_t = nullptr);
     JsonValue(const JsonType);
     JsonValue(const int);
     JsonValue(const float);
-    JsonValue(const bool);
+    explicit JsonValue(const bool);
+    JsonValue(const char*);
     JsonValue(const std::string&);
     JsonValue(const JsonArray&);
     JsonValue(const JsonObject&);
@@ -56,13 +57,16 @@ class JsonValue {
     void changeType(const JsonType);
     bool boolNot();
     void resetValue();
+    void setNull(void);
     void setValue(const int);
     void setValue(const float);
     void setValue(const bool);
+    void setValue(const char*);
     void setValue(const std::string&);
     void setValue(const JsonArray&);
     void setValue(const JsonObject&);
 
+    std::nullptr_t getAsNull();
     int getAsInt();
     float getAsFloat();
     bool getAsBool();
@@ -73,12 +77,13 @@ class JsonValue {
     bool typeMatches(const JsonValue&) const;
 
     JsonValue& operator=(const JsonValue&);
-    JsonValue& operator=(const int);
-    JsonValue& operator=(const float);
-    JsonValue& operator=(const bool);
-    JsonValue& operator=(const std::string&);
-    JsonValue& operator=(const JsonArray&);
-    JsonValue& operator=(const JsonObject&);
+    int operator=(const int);
+    float operator=(const float);
+    bool operator=(bool);
+    const char* operator=(const char*);
+    std::string& operator=(std::string&);
+    const JsonArray& operator=(const JsonArray&);
+    const JsonObject& operator=(const JsonObject&);
 
     bool operator==(const JsonValue&);
     bool operator==(const int);
@@ -160,6 +165,9 @@ class JsonValue {
     JsonValue& operator%=(const JsonValue&);
     JsonValue& operator%=(const int);
     JsonValue& operator%=(const float);
+
+    JsonValue& operator[](const int);
+    JsonValue& operator[](const std::string&);
 
   private:
     void destroyCurrentValue();

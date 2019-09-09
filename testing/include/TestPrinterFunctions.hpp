@@ -15,7 +15,7 @@ void printBasicMessage(const std::string&, const std::string& color = TEXT_RESET
 void printFail(const std::string&);
 void printNewline(unsigned int = 1);
 void printSuccess(const std::string&);
-void printTestGroup(const std::string&, void (*)(JsonValue&), JsonValue&);
+void printTestGroup(const std::string&, void (*)(JsonValue&));
 void printTestResultStatus(const std::string&, const bool);
 
 #endif

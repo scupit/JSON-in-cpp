@@ -4,17 +4,41 @@
 
 #include "JsonValue.hpp"
 #include "JsonValueTestFunctions.hpp"
+#include "OperatorTestFunctions.hpp"
 #include "TestPrinterFunctions.hpp"
 
-int main(void) {
-  JsonValue jVal(JsonType::JFLOAT);
+bool flagPassed(const unsigned int, const char**, const std::string&);
+void testOperators(const bool);
+void testValues(const bool);
 
-  printTestGroup("Bool values", testBool, jVal);
-  printTestGroup("Float values", testFloat, jVal);
-  printTestGroup("Int values", testInt, jVal);
-  printTestGroup("String values", testString, jVal);
-  printTestGroup("Array values", testArray, jVal);
-  printTestGroup("Object values", testObject, jVal);
-
+int main(int argc, const char** argv) {
+  testOperators(flagPassed(argc, argv, "-o"));
+  testValues(flagPassed(argc, argv, "-v"));
   return 0;
+}
+
+bool flagPassed(const unsigned int argc, const char** argv, const std::string& flag) {
+  for (unsigned int i = 0; i < argc; ++i) {
+    if (argv[i] == flag) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void testOperators(const bool shouldTestOperators) {
+  if (shouldTestOperators) {
+    printTestGroup("'=' operator", testEqualsOperators);
+  }
+}
+
+void testValues(const bool shouldTestValues) {
+  if (shouldTestValues) {
+    printTestGroup("Bool values", testBool);
+    printTestGroup("Float values", testFloat);
+    printTestGroup("Int values", testInt);
+    printTestGroup("String values", testString);
+    printTestGroup("Array values", testArray);
+    printTestGroup("Object values", testObject);
+  }
 }

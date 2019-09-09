@@ -25,7 +25,8 @@ void printSuccess(const std::string& whatTest) {
   system(("echo " TEXT_GREEN + whatTest + TEXT_RESET " - PASSED" "\n").c_str());
 }
 
-void printTestGroup(const std::string& groupName, void (*testFunction)(JsonValue&), JsonValue& jVal) {
+void printTestGroup(const std::string& groupName, void (*testFunction)(JsonValue&)) {
+  JsonValue jVal;
   printBasicMessage("\n" HEADING_SEPARATOR "\n");
   printBasicMessage("Now testing " + groupName, TEXT_YELLOW);
   printBasicMessage(HEADING_SEPARATOR "\n");

@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-JsonValue::JsonValue()
+JsonValue::JsonValue(const std::nullptr_t nullType)
 : type(JsonType::JNULL), value({})
 { }
 
@@ -26,6 +26,12 @@ JsonValue::JsonValue(const bool newBoolValue)
 : type(JsonType::JBOOL), value({})
 {
   value.boolValue = newBoolValue;
+}
+
+JsonValue::JsonValue(const char* newStringValue)
+: type(JsonType::JSTRING), value({})
+{
+  value.stringValue = new std::string(newStringValue);
 }
 
 JsonValue::JsonValue(const std::string& newStringValue)
@@ -82,6 +88,13 @@ void JsonValue::resetValue() {
   typeChangeHelper(type);
 }
 
+void JsonValue::setNull(void) {
+  if (type != JsonType::JNULL) {
+    destroyCurrentValue();
+  }
+  type = JsonType::JNULL;
+}
+
 void JsonValue::setValue(const int newIntValue) {
   if (type != JsonType::JINT) {
     destroyCurrentValue();
@@ -106,6 +119,12 @@ void JsonValue::setValue(const bool newBoolValue) {
   type = JsonType::JBOOL;
 }
 
+void JsonValue::setValue(const char* newStringValue) {
+  destroyCurrentValue();
+  value.stringValue = new std::string(newStringValue);
+  type = JsonType::JSTRING;
+}
+
 void JsonValue::setValue(const std::string& newStringValue) {
   destroyCurrentValue();
   value.stringValue = new std::string(newStringValue);
@@ -124,44 +143,51 @@ void JsonValue::setValue(const JsonObject& newObjectValue) {
   type = JsonType::JOBJECT;
 }
 
+std::nullptr_t JsonValue::getAsNull() {
+  if (type != JsonType::JNULL) {
+    throw std::runtime_error("Tried to get JsonValue value as null (nullptr), when it it not of type JNULL");
+  }
+  return nullptr;
+}
+
 int JsonValue::getAsInt() {
   if (type != JsonType::JINT) {
-    throw std::runtime_error("ERROR: Tried to get JsonValue value as int, when it is not type JINT");
+    throw std::runtime_error("Tried to get JsonValue value as int, when it is not type JINT");
   }
   return value.intValue;
 }
 
 float JsonValue::getAsFloat() {
   if (type != JsonType::JFLOAT) {
-    throw std::runtime_error("ERROR: Tried to get JsonValue value as float, when it is not type JFLOAT");
+    throw std::runtime_error("Tried to get JsonValue value as float, when it is not type JFLOAT");
   }
   return value.floatValue;
 }
 
 bool JsonValue::getAsBool() {
   if (type != JsonType::JBOOL) {
-    throw std::runtime_error("ERROR: Tried to get JsonValue value as bool, when it is not type JBOOL");
+    throw std::runtime_error("Tried to get JsonValue value as bool, when it is not type JBOOL");
   }
   return value.boolValue;
 }
 
 std::string& JsonValue::getAsString() {
   if (type != JsonType::JSTRING) {
-    throw std::runtime_error("ERROR: Tried to get JsonValue value as std::string, when it is not type JSTRING.");
+    throw std::runtime_error("Tried to get JsonValue value as std::string, when it is not type JSTRING.");
   }
   return *value.stringValue;
 }
 
 JsonArray& JsonValue::getAsVector() {
   if (type != JsonType::JARRAY) {
-    throw std::runtime_error("ERROR: Tried to get JsonValue value as JsonArray (std::vector), when it is not type JARRAY.");
+    throw std::runtime_error("Tried to get JsonValue value as JsonArray (std::vector), when it is not type JARRAY.");
   }
   return *value.arrayValue;
 }
 
 JsonObject& JsonValue::getAsMap() {
   if (type != JsonType::JOBJECT) {
-    throw std::runtime_error("ERROR: Tried to get JsonValue value as JsonObject (std::unordered_map), when it is not type JOBJECT.");
+    throw std::runtime_error("Tried to get JsonValue value as JsonObject (std::unordered_map), when it is not type JOBJECT.");
   }
   return *value.objectValue;
 }
@@ -197,34 +223,61 @@ JsonValue& JsonValue::operator=(const JsonValue& other) {
   return *this;
 }
 
-JsonValue& JsonValue::operator=(const int newIntValue) {
+int JsonValue::operator=(const int newIntValue) {
   setValue(newIntValue);
-  return *this;
+  return newIntValue;
 }
 
-JsonValue& JsonValue::operator=(const float newFloatValue) {
+float JsonValue::operator=(const float newFloatValue) {
   setValue(newFloatValue);
-  return *this;
+  return newFloatValue;
 }
 
-JsonValue& JsonValue::operator=(const bool newBoolValue) {
-  setValue(newBoolValue);
-  return *this;
-}
-
-JsonValue& JsonValue::operator=(const std::string& newStringValue) {
+const char* JsonValue::operator=(const char* newStringValue) {
   setValue(newStringValue);
-  return *this;
+  return newStringValue;
 }
 
-JsonValue& JsonValue::operator=(const JsonArray& newArrayValue) {
+bool JsonValue::operator=(const bool newBoolValue) {
+  setValue(newBoolValue);
+  return newBoolValue;
+}
+
+std::string& JsonValue::operator=(std::string& newStringValue) {
+  setValue(newStringValue);
+  return newStringValue;
+}
+
+const JsonArray& JsonValue::operator=(const JsonArray& newArrayValue) {
   setValue(newArrayValue);
-  return *this;
+  return newArrayValue;
 }
 
-JsonValue& JsonValue::operator=(const JsonObject& newObjectValue) {
+const JsonObject& JsonValue::operator=(const JsonObject& newObjectValue) {
   setValue(newObjectValue);
-  return *this;
+  return newObjectValue;
+}
+
+JsonValue& JsonValue::operator[](const int index) {
+  if (type != JsonType::JARRAY) {
+    throw std::runtime_error("Attemped to use array operator on JsonValue not of type JARRAY");
+  }
+  return value.arrayValue->at(index);
+}
+
+JsonValue& JsonValue::operator[](const std::string& key) {
+  if (type != JsonType::JOBJECT) {
+    throw std::runtime_error("Attemped to access a map key on JsonValue not of type JOBJECT");
+  }
+  auto valIter = value.objectValue->find(key);
+
+  if (valIter == value.objectValue->end()) {
+    (*value.objectValue)[key] = JsonValue();
+    return value.objectValue->at("key");
+  }
+  else {
+    return valIter->second;
+  }
 }
 
 // Only heap allocated values need to be destroyed.
