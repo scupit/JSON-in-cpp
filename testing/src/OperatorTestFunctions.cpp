@@ -1,8 +1,6 @@
 #include "OperatorTestFunctions.hpp"
 #include "TestPrinterFunctions.hpp"
 
-#include <iostream>
-
 void testEqualsOperators(JsonValue& jVal) {
   jVal = JsonValue();
 

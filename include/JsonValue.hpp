@@ -89,6 +89,7 @@ class JsonValue {
     bool operator==(const int);
     bool operator==(const float);
     bool operator==(const bool);
+    bool operator==(const char*);
     bool operator==(const std::string&);
     bool operator==(const JsonArray&);
     bool operator==(const JsonObject&);
@@ -97,6 +98,7 @@ class JsonValue {
     bool operator!=(const int);
     bool operator!=(const float);
     bool operator!=(const bool);
+    bool operator!=(const char*);
     bool operator!=(const std::string&);
     bool operator!=(const JsonArray&);
     bool operator!=(const JsonObject&);
