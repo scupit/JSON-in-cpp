@@ -194,30 +194,37 @@ JsonValue& JsonValue::operator=(const JsonValue& other) {
       type = other.type;
       break;
   }
+  return *this;
 }
 
 JsonValue& JsonValue::operator=(const int newIntValue) {
   setValue(newIntValue);
+  return *this;
 }
 
 JsonValue& JsonValue::operator=(const float newFloatValue) {
   setValue(newFloatValue);
+  return *this;
 }
 
 JsonValue& JsonValue::operator=(const bool newBoolValue) {
   setValue(newBoolValue);
+  return *this;
 }
 
 JsonValue& JsonValue::operator=(const std::string& newStringValue) {
   setValue(newStringValue);
+  return *this;
 }
 
 JsonValue& JsonValue::operator=(const JsonArray& newArrayValue) {
   setValue(newArrayValue);
+  return *this;
 }
 
 JsonValue& JsonValue::operator=(const JsonObject& newObjectValue) {
   setValue(newObjectValue);
+  return *this;
 }
 
 // Only heap allocated values need to be destroyed.
