@@ -29,6 +29,7 @@ bool flagPassed(const unsigned int argc, const char** argv, const std::string& f
 void testOperators(const bool shouldTestOperators) {
   if (shouldTestOperators) {
     printTestGroup("'=' operator", testEqualsOperators);
+    printTestGroup("'==' and '!=' operators", testBoolEqualityOperators);
   }
 }
 

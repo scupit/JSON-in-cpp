@@ -4,5 +4,6 @@
 #include "JsonValue.hpp"
 
 void testEqualsOperators(JsonValue&);
+void testBoolEqualityOperators(JsonValue&);
 
 #endif

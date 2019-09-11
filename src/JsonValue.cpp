@@ -272,18 +272,18 @@ const JsonObject& JsonValue::operator=(const JsonObject& newObjectValue) {
   return newObjectValue;
 }
 
-bool JsonValue::operator==(const JsonValue& other) {
+bool JsonValue::operator==(const JsonValue& other) const {
   if (!typeMatches(other)) {
     return false;
   }
   
   switch (other.type) {
     case JsonType::JSTRING:
-      return *this == other.value.stringValue;
+      return *this == *other.value.stringValue;
     case JsonType::JARRAY:
-      return *this == other.value.arrayValue;
+      return *this == *other.value.arrayValue;
     case JsonType::JOBJECT:
-      return *this == other.value.objectValue;
+      return *this == *other.value.objectValue;
     case JsonType::JINT:
       return *this == other.value.intValue;
     case JsonType::JFLOAT:
@@ -295,107 +295,112 @@ bool JsonValue::operator==(const JsonValue& other) {
   }
 }
 
-bool JsonValue::operator==(const int otherIntValue) {
-  if (type != JsonType::JINT) {
-    throw std::runtime_error("Attempted to check if an int is equal to a JsonValue not of type JINT");
+bool JsonValue::operator==(const int otherIntValue) const {
+  if (type == JsonType::JINT) {
+    return value.intValue == otherIntValue;
   }
-  return value.intValue == otherIntValue;
+  else if (type == JsonType::JFLOAT) {
+    return value.floatValue == static_cast<float>(otherIntValue);
+  }
+  else {
+    throw std::runtime_error("Attempted to check if an int is equal to a JsonValue not of type JINT or JFLOAT");
+  }
 }
 
-bool JsonValue::operator==(const float otherFloatValue) {
-  if (type != JsonType::JFLOAT) {
-    throw std::runtime_error("Attempted to check if a float is equal to a JsonValue not of type JFLOAT");
+bool JsonValue::operator==(const float otherFloatValue) const {
+  if (type == JsonType::JFLOAT) {
+    return value.floatValue == otherFloatValue;
   }
-  return value.floatValue == otherFloatValue;
+  else if (type == JsonType::JINT) {
+    return static_cast<float>(value.intValue) == otherFloatValue;
+  }
+  else {
+    throw std::runtime_error("Attempted to check if a float is equal to a JsonValue not of type JFLOAT or JINT");
+  }
 }
 
-bool JsonValue::operator==(const bool otherBoolValue) {
+bool JsonValue::operator==(const bool otherBoolValue) const {
   if (type != JsonType::JBOOL) {
     throw std::runtime_error("Attempted to check if a bool id equal to a JsonValue not of type JBOOL");
   }
-  return value.boolValue = otherBoolValue;
+  return value.boolValue == otherBoolValue;
 }
 
-bool JsonValue::operator==(const char* otherStringValue) {
+bool JsonValue::operator==(const char* otherStringValue) const {
   if (type != JsonType::JSTRING) {
     throw std::runtime_error("Attempted to check if a const char* is equal to a JsonValue not of type JSTRING");
   }
   return (*value.stringValue) == otherStringValue;
 }
 
-bool JsonValue::operator==(const std::string& otherStringValue) {
+bool JsonValue::operator==(const std::string& otherStringValue) const {
   if (type != JsonType::JSTRING) {
     throw std::runtime_error("Attempted to check if an std::string is equal to a JsonValue not of type JSTRING");
   }
   return (*value.stringValue) == otherStringValue;
 }
 
-bool JsonValue::operator==(const JsonArray& otherArrayValue) {
+bool JsonValue::operator==(const JsonArray& otherArrayValue) const {
   if (type != JsonType::JARRAY) {
     throw std::runtime_error("Attempted to check if JsonArray (std::vector) is equal to a JsonValue not of type JARRAY");
   }
-
-  if (value.arrayValue->size() != otherArrayValue.size()) {
-    return false;
-  }
-  
-  for (unsigned int i = 0; i < otherArrayValue.size(); ++i) {
-    if ( (*value.arrayValue)[i] != otherArrayValue) {
-      return false;
-    }
-  }
-  return true;
+  return *value.arrayValue == otherArrayValue;
 }
 
-bool JsonValue::operator==(const JsonObject& otherObjectValue) {
+bool JsonValue::operator==(const JsonObject& otherObjectValue) const {
   if (type != JsonType::JOBJECT) {
     throw std::runtime_error("Attempted to check if JsonObject (std::unordered_map) is equal to a JsonValue not of type JOBJECT");
   }
-
-  if (value.objectValue->size() != otherObjectValue.size()) {
-    return false;
-  }
-
-  for (auto iter = value.objectValue->begin(); iter != value.objectValue->end(); ++iter) {
-    const auto search = otherObjectValue.find(iter->first);
-    if (search == otherObjectValue.end() || search->second != iter->second) {
-      return false;
-    }
-  }
-  return true;
+  return *value.objectValue == otherObjectValue;
 }
 
-bool JsonValue::operator!=(const JsonValue& other) {
+bool operator==(const int integer, const JsonValue& jVal)       { return jVal == integer; }
+bool operator==(const float fp, const JsonValue& jVal)          { return jVal == fp;      }
+bool operator==(const bool boolean, const JsonValue& jVal)      { return jVal == boolean; }
+bool operator==(const std::string& str, const JsonValue& jVal)  { return jVal == str;     }
+bool operator==(const char* str, const JsonValue& jVal)         { return jVal == str;     }
+bool operator==(const JsonArray& arr, const JsonValue& jVal)    { return jVal == arr;     }
+bool operator==(const JsonObject& obj, const JsonValue& jVal)   { return jVal == obj;     }
+
+bool JsonValue::operator!=(const JsonValue& other) const {
   return !(*this == other);
 }
 
-bool JsonValue::operator!=(const int otherIntValue) {
+bool JsonValue::operator!=(const int otherIntValue) const {
   return !(*this == otherIntValue);
 }
 
-bool JsonValue::operator!=(const float otherFloatValue) {
+bool JsonValue::operator!=(const float otherFloatValue) const {
   return !(*this == otherFloatValue);
 }
 
-bool JsonValue::operator!=(const bool otherBoolValue) {
+bool JsonValue::operator!=(const bool otherBoolValue) const {
   return !(*this == otherBoolValue);
 }
 
-bool JsonValue::operator!=(const char* otherStringValue) {
+bool JsonValue::operator!=(const char* otherStringValue) const {
   return !(*this == otherStringValue);
 }
 
-bool JsonValue::operator!=(const std::string& otherStringValue) {
+bool JsonValue::operator!=(const std::string& otherStringValue) const {
   return !(*this == otherStringValue);
 }
 
-bool JsonValue::operator!=(const JsonArray& otherArrayValue) {
+bool JsonValue::operator!=(const JsonArray& otherArrayValue) const {
   return !(*this == otherArrayValue);
 }
 
-bool JsonValue::operator!=(const JsonObject& otherObjectValue) {
+bool JsonValue::operator!=(const JsonObject& otherObjectValue) const {
   return !(*this == otherObjectValue);
 }
+
+bool operator!=(const int integer, const JsonValue& jVal)       { return jVal != integer; }
+bool operator!=(const float fp, const JsonValue& jVal)          { return jVal != fp;      }
+bool operator!=(const bool boolean, const JsonValue& jVal)      { return jVal != boolean; }
+bool operator!=(const char* str, const JsonValue& jVal)         { return jVal != str;     }
+bool operator!=(const std::string& str, const JsonValue& jVal)  { return jVal != str;     }
+bool operator!=(const JsonArray& arr, const JsonValue& jVal)    { return jVal != arr;     }
+bool operator!=(const JsonObject& obj, const JsonValue& jVal)   { return jVal != obj;     }
 
 JsonValue& JsonValue::operator[](const int index) {
   if (type != JsonType::JARRAY) {
@@ -460,4 +465,40 @@ void JsonValue::typeChangeHelper(const JsonType newType) {
     default:
       break;
   }
+}
+
+bool operator==(const JsonArray& arr1, const JsonArray& arr2) {
+  if (arr1.size() != arr2.size()) {
+    return false;
+  }
+  
+  for (unsigned int i = 0; i < arr1.size(); ++i) {
+    if ( arr1[i] != arr2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool operator!=(const JsonArray& arr1, const JsonArray& arr2) {
+  return !(arr1 == arr2);
+}
+
+bool operator==(const JsonObject& obj1, const JsonObject& obj2) {
+  if (obj1.size() != obj2.size()) {
+    return false;
+  }
+
+  for (auto iter = obj1.begin(); iter != obj1.end(); ++iter) {
+    const auto search = obj2.find(iter->first);
+    if (search == obj2.end() || iter->second != search->second) {
+      return false;
+    }
+  }
+  return true;
+
+}
+
+bool operator!=(const JsonObject& obj1, const JsonObject& obj2) {
+  return !(obj1 == obj2);
 }

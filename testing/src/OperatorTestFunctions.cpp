@@ -1,6 +1,8 @@
 #include "OperatorTestFunctions.hpp"
 #include "TestPrinterFunctions.hpp"
 
+#include <iostream>
+
 void testEqualsOperators(JsonValue& jVal) {
   jVal = JsonValue();
 
@@ -77,5 +79,174 @@ void testEqualsOperators(JsonValue& jVal) {
   printTestResultStatus(
     "Assigning to nullptr",
     jVal.getType() == JsonType::JNULL
+  );
+}
+
+void testBoolEqualityOperators(JsonValue& jVal) {
+  jVal = JsonValue("A nice string");
+
+  printTestResultStatus(
+    "String equality (const char*)",
+    jVal == "A nice string"
+  );
+
+  printTestResultStatus(
+    "String equality (const char*)",
+    "A nice string" == jVal
+  );
+
+  printTestResultStatus(
+    "String inequality (const char*)",
+    jVal != "Some other nice string"
+  );
+
+  printTestResultStatus(
+    "String inequality (const char*)",
+    "Some other nice string" != jVal
+  );
+
+  printTestResultStatus(
+    "String equality (std::string)",
+    jVal == std::string("A nice string")
+  );
+
+  printTestResultStatus(
+    "String equality (std::string)",
+    std::string("A nice string") == jVal
+  );
+
+  printTestResultStatus(
+    "String inequality (std::string)",
+    jVal != std::string("Some other string")
+  );
+
+  printTestResultStatus(
+    "String inequality (std::string)",
+    std::string("Some other string") != jVal
+  );
+
+  jVal = -123;
+
+  printTestResultStatus(
+    "Int equality",
+    jVal == -123
+  );
+
+  printTestResultStatus(
+    "Int equality",
+    -123 == jVal
+  );
+
+  printTestResultStatus(
+    "Int inequality",
+    jVal != 0
+  );
+
+  printTestResultStatus(
+    "Int inequality",
+    0 != jVal
+  );
+
+  jVal = true;
+
+  printTestResultStatus(
+    "Bool equality",
+    jVal == true
+  );
+
+  printTestResultStatus(
+    "Bool equality",
+    true == jVal
+  );
+
+  printTestResultStatus(
+    "Bool inequality",
+    jVal != false
+  );
+
+  printTestResultStatus(
+    "Bool inequality",
+    false != jVal
+  );
+
+  jVal = 10.2f;
+
+  printTestResultStatus(
+    "Float equality",
+    jVal == 10.2f
+  );
+
+  printTestResultStatus(
+    "Float equality",
+    10.2f == jVal
+  );
+
+  printTestResultStatus(
+    "Float inequality",
+    jVal != -123.4f
+  );
+
+  printTestResultStatus(
+    "Float inequality",
+    -123.4f != jVal
+  );
+
+  JsonArray arr = { 10.2f, "Something cool", JsonArray()};
+  JsonArray otherArr = {10.2f, "Something cool", JsonArray({"Noice", "oh yeah"})};
+  jVal = arr;
+
+  // std::cout << (int)jVal.getType() << " should be " << (int)JsonType::JARRAY << std::endl;
+  // std::cout << (int)arr[2].getType() << " should be " << (int)JsonType::JARRAY << std::endl;
+  // std::cout << (int)otherArr[2].getType() << " should be " << (int)JsonType::JARRAY << std::endl;
+  // std::cout << (int)otherArr[2][0].getType() << " should be " << (int)JsonType::JARRAY << std::endl;
+
+  printTestResultStatus(
+    "JsonArray (vector) equality",
+    jVal == arr
+  );
+
+  printTestResultStatus(
+    "JsonArray (vector) equality",
+    arr == jVal
+  );
+
+  printTestResultStatus(
+    "JsonArray (vector) inequality",
+    jVal != otherArr
+  );
+
+  printTestResultStatus(
+    "JsonArray (vector) inequality",
+    otherArr != jVal
+  );
+
+  JsonObject aMap = {
+    {"something", -123},
+    {"another thing", "Noice"}
+  };
+  JsonObject otherMap = {
+    {"something", -120},
+    {"Another thing", "Noice"}
+  };
+  jVal = aMap;
+
+  printTestResultStatus(
+    "JsonObject (unordered_map) equality",
+    jVal == aMap
+  );
+
+  printTestResultStatus(
+    "JsonObject (unordered_map) equality",
+    aMap == jVal
+  );
+
+  printTestResultStatus(
+    "JsonObject (unordered_map) inequality",
+    jVal != otherMap
+  );
+
+  printTestResultStatus(
+    "JsonObject (unordered_map) inequality",
+    otherMap != jVal
   );
 }

@@ -79,29 +79,45 @@ class JsonValue {
     JsonValue& operator=(const JsonValue&);
     int operator=(const int);
     float operator=(const float);
-    bool operator=(bool);
+    bool operator=(const bool);
     const char* operator=(const char*);
     std::string& operator=(std::string&);
     const JsonArray& operator=(const JsonArray&);
     const JsonObject& operator=(const JsonObject&);
 
-    bool operator==(const JsonValue&);
-    bool operator==(const int);
-    bool operator==(const float);
-    bool operator==(const bool);
-    bool operator==(const char*);
-    bool operator==(const std::string&);
-    bool operator==(const JsonArray&);
-    bool operator==(const JsonObject&);
+    bool operator==(const JsonValue&) const;
+    bool operator==(const int) const;
+    bool operator==(const float) const;
+    bool operator==(const bool) const;
+    bool operator==(const char*) const;
+    bool operator==(const std::string&) const;
+    bool operator==(const JsonArray&) const;
+    bool operator==(const JsonObject&) const;
 
-    bool operator!=(const JsonValue&);
-    bool operator!=(const int);
-    bool operator!=(const float);
-    bool operator!=(const bool);
-    bool operator!=(const char*);
-    bool operator!=(const std::string&);
-    bool operator!=(const JsonArray&);
-    bool operator!=(const JsonObject&);
+    friend bool operator==(const int, const JsonValue&);
+    friend bool operator==(const float, const JsonValue&);
+    friend bool operator==(const bool, const JsonValue&);
+    friend bool operator==(const char*, const JsonValue&);
+    friend bool operator==(const std::string&, const JsonValue&);
+    friend bool operator==(const JsonArray&, const JsonValue&);
+    friend bool operator==(const JsonObject&, const JsonValue&);
+
+    bool operator!=(const JsonValue&) const;
+    bool operator!=(const int) const;
+    bool operator!=(const float) const;
+    bool operator!=(const bool) const;
+    bool operator!=(const char*) const;
+    bool operator!=(const std::string&) const;
+    bool operator!=(const JsonArray&) const;
+    bool operator!=(const JsonObject&) const;
+
+    friend bool operator!=(const int, const JsonValue&);
+    friend bool operator!=(const float, const JsonValue&);
+    friend bool operator!=(const bool, const JsonValue&);
+    friend bool operator!=(const char*, const JsonValue&);
+    friend bool operator!=(const std::string&, const JsonValue&);
+    friend bool operator!=(const JsonArray&, const JsonValue&);
+    friend bool operator!=(const JsonObject&, const JsonValue&);
 
     bool operator<(const JsonValue&);
     bool operator<(const int);
@@ -175,5 +191,11 @@ class JsonValue {
     void destroyCurrentValue();
     void typeChangeHelper(const JsonType);
 };
+
+bool operator==(const JsonArray&, const JsonArray&);
+bool operator!=(const JsonArray&, const JsonArray&);
+
+bool operator==(const JsonObject&, const JsonObject&);
+bool operator!=(const JsonObject&, const JsonObject&);
 
 #endif
