@@ -119,25 +119,41 @@ class JsonValue {
     friend bool operator!=(const JsonArray&, const JsonValue&);
     friend bool operator!=(const JsonObject&, const JsonValue&);
 
-    bool operator<(const JsonValue&);
-    bool operator<(const int);
-    bool operator<(const float);
-    bool operator<(const bool);
+    bool operator<(const JsonValue&) const;
+    bool operator<(const int) const;
+    bool operator<(const float) const;
+    bool operator<(const bool) const;
 
-    bool operator<=(const JsonValue&);
-    bool operator<=(const int);
-    bool operator<=(const float);
-    bool operator<=(const bool);
+    friend bool operator<(const int, const JsonValue&);
+    friend bool operator<(const float, const JsonValue&);
+    friend bool operator<(const bool, const JsonValue&);
 
-    bool operator>(const JsonValue&);
-    bool operator>(const int);
-    bool operator>(const float);
-    bool operator>(const bool);
+    bool operator<=(const JsonValue&) const;
+    bool operator<=(const int) const;
+    bool operator<=(const float) const;
+    bool operator<=(const bool) const;
 
-    bool operator>=(const JsonValue&);
-    bool operator>=(const int);
-    bool operator>=(const float);
-    bool operator>=(const bool);
+    friend bool operator<=(const int, const JsonValue&);
+    friend bool operator<=(const float, const JsonValue&);
+    friend bool operator<=(const bool, const JsonValue&);
+
+    bool operator>(const JsonValue&) const;
+    bool operator>(const int) const;
+    bool operator>(const float) const;
+    bool operator>(const bool) const;
+
+    friend bool operator>(const int, const JsonValue&);
+    friend bool operator>(const float, const JsonValue&);
+    friend bool operator>(const bool, const JsonValue&);
+
+    bool operator>=(const JsonValue&) const;
+    bool operator>=(const int) const;
+    bool operator>=(const float) const;
+    bool operator>=(const bool) const;
+
+    friend bool operator>=(const int, const JsonValue&);
+    friend bool operator>=(const float, const JsonValue&);
+    friend bool operator>=(const bool, const JsonValue&);
 
     // Only for JsonValues which are holding a boolean
     bool operator!();
