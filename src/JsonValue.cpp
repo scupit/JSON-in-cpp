@@ -402,6 +402,136 @@ bool operator!=(const std::string& str, const JsonValue& jVal)  { return jVal !=
 bool operator!=(const JsonArray& arr, const JsonValue& jVal)    { return jVal != arr;     }
 bool operator!=(const JsonObject& obj, const JsonValue& jVal)   { return jVal != obj;     }
 
+bool JsonValue::operator<(const JsonValue& other) const {
+  // If 'other' is valid type
+  if (other.type == JsonType::JINT || other.type == JsonType::JARRAY) {
+    switch (type) {
+      case JsonType::JINT:
+        return other > value.intValue;
+      case JsonType::JFLOAT:
+        return other > value.floatValue;
+      default:
+        break;
+    }
+  }
+  throw std::runtime_error("Tried to use the '<' operator on a non-numeric JsonValue");
+}
+
+bool JsonValue::operator<(const int integer) const {
+  switch (type) {
+    case JsonType::JINT:
+      return value.intValue < integer;
+    case JsonType::JFLOAT:
+      return value.floatValue < static_cast<float>(integer);
+    default:
+      throw std::runtime_error("Tried to use the '<' operator on a non-numeric JsonValue");
+  }
+}
+
+bool JsonValue::operator<(const float fp) const {
+  switch (type) {
+    case JsonType::JFLOAT:
+      return value.floatValue < fp;
+    case JsonType::JINT:
+      return static_cast<float>(value.intValue) < fp;
+    default:
+      throw std::runtime_error("Tried to use the '<' operator on a non-numeric JsonValue");
+  }
+}
+
+bool operator<(const int integer, const JsonValue& jVal) {
+  return jVal > integer;
+}
+
+bool operator<(const float fp, const JsonValue& jVal) {
+  return jVal > fp;
+}
+
+bool JsonValue::operator<=(const JsonValue& other) const {
+  // If 'other' is valid type
+  if (other.type == JsonType::JINT || other.type == JsonType::JARRAY) {
+    switch (type) {
+      case JsonType::JINT:
+        return other >= value.intValue;
+      case JsonType::JFLOAT:
+        return other >= value.floatValue;
+      default:
+        break;
+    }
+  }
+  throw std::runtime_error("Tried to use the '<=' operator on a non-numeric JsonValue");
+}
+
+bool JsonValue::operator<=(const int integer) const {
+  switch (type) {
+    case JsonType::JINT:
+      return value.intValue <= integer;
+    case JsonType::JFLOAT:
+      return value.floatValue <= static_cast<float>(integer);
+    default:
+      throw std::runtime_error("Tried to use the '<=' operator on a non-numeric JsonValue");
+  }
+}
+
+bool JsonValue::operator<=(const float fp) const {
+  switch (type) {
+    case JsonType::JFLOAT:
+      return value.floatValue <= fp;
+    case JsonType::JINT:
+      return static_cast<float>(value.intValue) <= fp;
+    default:
+      throw std::runtime_error("Tried to use the '<=' operator on a non-numeric JsonValue");
+  }
+}
+
+bool operator<=(const int integer, const JsonValue& jVal) {
+  return jVal >= integer;
+}
+
+bool operator<=(const float fp, const JsonValue& jVal) {
+  return jVal >= fp;
+}
+
+bool JsonValue::operator>(const JsonValue& other) const {
+  return !(*this <= other);
+}
+
+bool JsonValue::operator>(const int integer) const {
+  return !(*this <= integer);
+}
+
+bool JsonValue::operator>(const float fp) const {
+  return !(*this <= fp);
+}
+
+bool operator>(const int integer, const JsonValue& jVal) {
+  return jVal < integer;
+}
+
+bool operator>(const float fp, const JsonValue& jVal) {
+  return jVal < fp;
+}
+
+bool JsonValue::operator>=(const JsonValue& other) const {
+  return !(*this < other);
+}
+
+bool JsonValue::operator>=(const int integer) const {
+  return !(*this < integer);
+}
+
+bool JsonValue::operator>=(const float fp) const {
+  return !(*this < fp);
+}
+
+bool operator>=(const int integer, const JsonValue& jVal) {
+  return jVal <= integer;
+}
+
+bool operator>=(const float fp, const JsonValue& jVal) {
+  return jVal <= fp;
+}
+
 JsonValue& JsonValue::operator[](const int index) {
   if (type != JsonType::JARRAY) {
     throw std::runtime_error("Attemped to use array operator on JsonValue not of type JARRAY");
