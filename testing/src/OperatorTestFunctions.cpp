@@ -254,6 +254,8 @@ void testBoolEqualityOperators(JsonValue& jVal) {
 void testComparisonOperators(JsonValue& jVal) {
   testLTOperator(jVal);
   testLTEOperator(jVal);
+  testGTOperator(jVal);
+  testGTEOperator(jVal);
 }
 
 void testLTOperator(JsonValue& jVal) {
@@ -276,7 +278,7 @@ void testLTOperator(JsonValue& jVal) {
 
   printTestResultStatus(
     "'<' operator with JsonValue JINT",
-    jVal < JsonValue(9)
+    jVal < JsonValue(90)
   );
 
   printTestResultStatus(
@@ -362,7 +364,7 @@ void testLTEOperator(JsonValue& jVal) {
 
   printTestResultStatus(
     "'<=' operator with JsonValue JINT",
-    jVal <= JsonValue(9)
+    jVal <= JsonValue(90)
   );
 
   printTestResultStatus(
@@ -425,5 +427,177 @@ void testLTEOperator(JsonValue& jVal) {
   printTestResultStatus(
     "'<=' operator with JsonValue JINT",
     JsonValue(8) <= jVal
+  );
+}
+
+void testLTOperator(JsonValue& jVal) {
+  jVal = 10.2f;
+
+  printTestResultStatus(
+    "'>' operator with float literal",
+    !(jVal > 10.2f)
+  );
+
+  printTestResultStatus(
+    "'>' operator with int literal",
+    jVal > 9
+  );
+
+  printTestResultStatus(
+    "'>' operator with JsonValue JFLOAT",
+    jVal > JsonValue(10.1f)
+  );
+
+  printTestResultStatus(
+    "'>' operator with JsonValue JINT",
+    jVal > JsonValue(9)
+  );
+
+  printTestResultStatus(
+    "'>' operator with float literal",
+    10.4f > jVal
+  );
+
+  printTestResultStatus(
+    "'>' operator with int literal",
+    11 > jVal
+  );
+
+  printTestResultStatus(
+    "'>' operator with JsonValue JFLOAT",
+    JsonValue(10.4f) > jVal
+  );
+
+  printTestResultStatus(
+    "'>' operator with JsonValue JINT",
+    JsonValue(80) > jVal
+  );
+
+  jVal = 9;
+
+  printTestResultStatus(
+    "'>' operator with float literal",
+    jVal > 8.1f
+  );
+
+  printTestResultStatus(
+    "'>' operator with int literal",
+    !(jVal > 9) 
+  );
+
+  printTestResultStatus(
+    "'>' operator with JsonValue JFLOAT",
+    jVal > JsonValue(8.1f)
+  );
+
+  printTestResultStatus(
+    "'>' operator with JsonValue JINT",
+    jVal > JsonValue(8)
+  );
+
+  printTestResultStatus(
+    "'>' operator with float literal",
+    10.2f > jVal
+  );
+
+  printTestResultStatus(
+    "'>' operator with int literal",
+    10 > jVal
+  );
+
+  printTestResultStatus(
+    "'>' operator with JsonValue JFLOAT",
+    JsonValue(10.4f) > jVal
+  );
+
+  printTestResultStatus(
+    "'>' operator with JsonValue JINT",
+    JsonValue(10) > jVal
+  );
+}
+
+void testLTEOperator(JsonValue& jVal) {
+  jVal = 10.2f;
+
+  printTestResultStatus(
+    "'>=' operator with float literal",
+    jVal >= 10.2f
+  );
+
+  printTestResultStatus(
+    "'>=' operator with int literal",
+    jVal >= 8
+  );
+
+  printTestResultStatus(
+    "'>=' operator with JsonValue JFLOAT",
+    jVal >= JsonValue(10.1f)
+  );
+
+  printTestResultStatus(
+    "'>=' operator with JsonValue JINT",
+    jVal >= JsonValue(9)
+  );
+
+  printTestResultStatus(
+    "'>=' operator with float literal",
+    10.2f >= jVal
+  );
+
+  printTestResultStatus(
+    "'>=' operator with int literal",
+    13 >= jVal
+  );
+
+  printTestResultStatus(
+    "'>=' operator with JsonValue JFLOAT",
+    JsonValue(10.4f) >= jVal
+  );
+
+  printTestResultStatus(
+    "'>=' operator with JsonValue JINT",
+    JsonValue(80) >= jVal
+  );
+
+  jVal = 9;
+
+  printTestResultStatus(
+    "'>=' operator with float literal",
+    jVal >= 1.2f
+  );
+
+  printTestResultStatus(
+    "'>=' operator with int literal",
+    jVal >= 9 
+  );
+
+  printTestResultStatus(
+    "'>=' operator with JsonValue JFLOAT",
+    jVal >= JsonValue(1.4f)
+  );
+
+  printTestResultStatus(
+    "'>=' operator with JsonValue JINT",
+    jVal >= JsonValue(9)
+  );
+
+  printTestResultStatus(
+    "'>=' operator with float literal",
+    10.2f >= jVal
+  );
+
+  printTestResultStatus(
+    "'>=' operator with int literal",
+    10 >= jVal
+  );
+
+  printTestResultStatus(
+    "'>=' operator with JsonValue JFLOAT",
+    JsonValue(10.4f) >= jVal
+  );
+
+  printTestResultStatus(
+    "'>=' operator with JsonValue JINT",
+    JsonValue(80) >= jVal
   );
 }
