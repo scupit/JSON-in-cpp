@@ -30,6 +30,7 @@ void testOperators(const bool shouldTestOperators) {
   if (shouldTestOperators) {
     printTestGroup("'=' operator", testEqualsOperators);
     printTestGroup("'==' and '!=' operators", testBoolEqualityOperators);
+    printTestGroup("Comparison operators", testComparisonOperators);
   }
 }
 

@@ -1,8 +1,6 @@
 #include "OperatorTestFunctions.hpp"
 #include "TestPrinterFunctions.hpp"
 
-#include <iostream>
-
 void testEqualsOperators(JsonValue& jVal) {
   jVal = JsonValue();
 
@@ -194,11 +192,6 @@ void testBoolEqualityOperators(JsonValue& jVal) {
   JsonArray arr = { 10.2f, "Something cool", JsonArray()};
   JsonArray otherArr = {10.2f, "Something cool", JsonArray({"Noice", "oh yeah"})};
   jVal = arr;
-
-  // std::cout << (int)jVal.getType() << " should be " << (int)JsonType::JARRAY << std::endl;
-  // std::cout << (int)arr[2].getType() << " should be " << (int)JsonType::JARRAY << std::endl;
-  // std::cout << (int)otherArr[2].getType() << " should be " << (int)JsonType::JARRAY << std::endl;
-  // std::cout << (int)otherArr[2][0].getType() << " should be " << (int)JsonType::JARRAY << std::endl;
 
   printTestResultStatus(
     "JsonArray (vector) equality",
@@ -396,7 +389,7 @@ void testLTEOperator(JsonValue& jVal) {
 
   printTestResultStatus(
     "'<=' operator with int literal",
-    !(jVal <= 9) 
+    jVal <= 9 
   );
 
   printTestResultStatus(
@@ -430,7 +423,7 @@ void testLTEOperator(JsonValue& jVal) {
   );
 }
 
-void testLTOperator(JsonValue& jVal) {
+void testGTOperator(JsonValue& jVal) {
   jVal = 10.2f;
 
   printTestResultStatus(
@@ -516,7 +509,7 @@ void testLTOperator(JsonValue& jVal) {
   );
 }
 
-void testLTEOperator(JsonValue& jVal) {
+void testGTEOperator(JsonValue& jVal) {
   jVal = 10.2f;
 
   printTestResultStatus(

@@ -404,7 +404,7 @@ bool operator!=(const JsonObject& obj, const JsonValue& jVal)   { return jVal !=
 
 bool JsonValue::operator<(const JsonValue& other) const {
   // If 'other' is valid type
-  if (other.type == JsonType::JINT || other.type == JsonType::JARRAY) {
+  if (other.type == JsonType::JINT || other.type == JsonType::JFLOAT) {
     switch (type) {
       case JsonType::JINT:
         return other > value.intValue;
@@ -449,7 +449,7 @@ bool operator<(const float fp, const JsonValue& jVal) {
 
 bool JsonValue::operator<=(const JsonValue& other) const {
   // If 'other' is valid type
-  if (other.type == JsonType::JINT || other.type == JsonType::JARRAY) {
+  if (other.type == JsonType::JINT || other.type == JsonType::JFLOAT) {
     switch (type) {
       case JsonType::JINT:
         return other >= value.intValue;

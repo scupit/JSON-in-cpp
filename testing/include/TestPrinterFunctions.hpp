@@ -1,6 +1,8 @@
 #ifndef TESTPRINTERFUNCTIONS_HPP
 #define TESTPRINTERFUNCTIONS_HPP
 
+#define CONSOLE_PRINTS_IN_COLOR 0
+
 #define TEXT_RESET "\x1b[0m"
 #define TEXT_RED "\x1b[0;31m"
 #define TEXT_GREEN "\x1b[0;32m"
