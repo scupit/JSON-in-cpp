@@ -253,6 +253,7 @@ void testBoolEqualityOperators(JsonValue& jVal) {
 
 void testComparisonOperators(JsonValue& jVal) {
   testLTOperator(jVal);
+  testLTEOperator(jVal);
 }
 
 void testLTOperator(JsonValue& jVal) {
@@ -280,7 +281,7 @@ void testLTOperator(JsonValue& jVal) {
 
   printTestResultStatus(
     "'<' operator with float literal",
-    !(jVal < 10.2f)
+    !(10.2f < jVal)
   );
 
   printTestResultStatus(
@@ -296,5 +297,133 @@ void testLTOperator(JsonValue& jVal) {
   printTestResultStatus(
     "'<' operator with JsonValue JINT",
     JsonValue(8) < jVal
+  );
+
+  jVal = 9;
+
+  printTestResultStatus(
+    "'<' operator with float literal",
+    jVal < 10.2f
+  );
+
+  printTestResultStatus(
+    "'<' operator with int literal",
+    !(jVal < 9) 
+  );
+
+  printTestResultStatus(
+    "'<' operator with JsonValue JFLOAT",
+    jVal < JsonValue(10.4f)
+  );
+
+  printTestResultStatus(
+    "'<' operator with JsonValue JINT",
+    jVal < JsonValue(90)
+  );
+
+  printTestResultStatus(
+    "'<' operator with float literal",
+    !(10.2f < jVal)
+  );
+
+  printTestResultStatus(
+    "'<' operator with int literal",
+    !(10 < jVal)
+  );
+
+  printTestResultStatus(
+    "'<' operator with JsonValue JFLOAT",
+    JsonValue(1.4f) < jVal
+  );
+
+  printTestResultStatus(
+    "'<' operator with JsonValue JINT",
+    JsonValue(8) < jVal
+  );
+}
+
+void testLTEOperator(JsonValue& jVal) {
+  jVal = 10.2f;
+
+  printTestResultStatus(
+    "'<=' operator with float literal",
+    jVal <= 10.2f
+  );
+
+  printTestResultStatus(
+    "'<=' operator with int literal",
+    jVal <= 11
+  );
+
+  printTestResultStatus(
+    "'<=' operator with JsonValue JFLOAT",
+    jVal <= JsonValue(10.4f)
+  );
+
+  printTestResultStatus(
+    "'<=' operator with JsonValue JINT",
+    jVal <= JsonValue(9)
+  );
+
+  printTestResultStatus(
+    "'<=' operator with float literal",
+    10.2f <= jVal
+  );
+
+  printTestResultStatus(
+    "'<=' operator with int literal",
+    10 <= jVal
+  );
+
+  printTestResultStatus(
+    "'<=' operator with JsonValue JFLOAT",
+    JsonValue(1.4f) <= jVal
+  );
+
+  printTestResultStatus(
+    "'<=' operator with JsonValue JINT",
+    JsonValue(8) <= jVal
+  );
+
+  jVal = 9;
+
+  printTestResultStatus(
+    "'<=' operator with float literal",
+    jVal <= 10.2f
+  );
+
+  printTestResultStatus(
+    "'<=' operator with int literal",
+    !(jVal <= 9) 
+  );
+
+  printTestResultStatus(
+    "'<=' operator with JsonValue JFLOAT",
+    jVal <= JsonValue(10.4f)
+  );
+
+  printTestResultStatus(
+    "'<=' operator with JsonValue JINT",
+    jVal <= JsonValue(90)
+  );
+
+  printTestResultStatus(
+    "'<=' operator with float literal",
+    !(10.2f <= jVal)
+  );
+
+  printTestResultStatus(
+    "'<=' operator with int literal",
+    !(10 <= jVal)
+  );
+
+  printTestResultStatus(
+    "'<=' operator with JsonValue JFLOAT",
+    JsonValue(1.4f) <= jVal
+  );
+
+  printTestResultStatus(
+    "'<=' operator with JsonValue JINT",
+    JsonValue(8) <= jVal
   );
 }
