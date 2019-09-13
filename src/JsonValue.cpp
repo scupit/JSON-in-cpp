@@ -532,6 +532,44 @@ bool operator>=(const float fp, const JsonValue& jVal) {
   return jVal <= fp;
 }
 
+JsonValue& JsonValue::operator++() {
+  switch (type) {
+    case JsonType::JINT:
+      ++value.intValue;
+      return *this;
+    case JsonType::JFLOAT:
+      ++value.floatValue;
+      return *this;
+    default:
+      throw std::runtime_error("Attempted to increment a JsonValue of non-numeric type");
+  }
+}
+
+JsonValue JsonValue::operator++(int) {
+  JsonValue before = *this;
+  ++(*this);
+  return before;
+}
+
+JsonValue& JsonValue::operator--() {
+  switch (type) {
+    case JsonType::JINT:
+      ++value.intValue;
+      return *this;
+    case JsonType::JFLOAT:
+      ++value.floatValue;
+      return *this;
+    default:
+      throw std::runtime_error("Attempted to decrement a JsonValue of non-numeric type");
+  }
+}
+
+JsonValue JsonValue::operator--(int) {
+  JsonValue before = *this;
+  ++(*this);
+  return before;
+}
+
 JsonValue& JsonValue::operator[](const int index) {
   if (type != JsonType::JARRAY) {
     throw std::runtime_error("Attemped to use array operator on JsonValue not of type JARRAY");

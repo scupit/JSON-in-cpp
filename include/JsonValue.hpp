@@ -150,6 +150,12 @@ class JsonValue {
     // Only for JsonValues which are holding a boolean
     bool operator!();
 
+    JsonValue& operator++();
+    JsonValue operator++(int);
+
+    JsonValue& operator--();
+    JsonValue operator--(int);
+
     JsonValue& operator+(const JsonValue&);
     int operator+(const int);
     float operator+(const float);
