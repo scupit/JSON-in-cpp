@@ -707,9 +707,9 @@ JsonValue JsonValue::operator-(const JsonValue& other) const {
   if (other.type == JsonType::JINT) {
     switch (type) {
       case JsonType::JINT:
-        return value.intValue + other.value.intValue;
+        return value.intValue - other.value.intValue;
       case JsonType::JFLOAT:
-        return value.floatValue + static_cast<float>(other.value.intValue);
+        return value.floatValue - static_cast<float>(other.value.intValue);
       default:
         throw std::runtime_error("Attempted to subtract a JsonValue (JINT) from a non-numeric JsonValue");
     }
@@ -717,9 +717,9 @@ JsonValue JsonValue::operator-(const JsonValue& other) const {
   else if (other.type == JsonType::JFLOAT) {
     switch (type) {
       case JsonType::JFLOAT:
-        return value.floatValue + other.value.floatValue;
+        return value.floatValue - other.value.floatValue;
       case JsonType::JINT:
-        return static_cast<float>(value.intValue) + other.value.floatValue;
+        return static_cast<float>(value.intValue) - other.value.floatValue;
       default:
         throw std::runtime_error("Attempted to subtract a JsonValue (JFLOAT) from a non-numeric JsonValue");
     }
@@ -730,9 +730,9 @@ JsonValue JsonValue::operator-(const JsonValue& other) const {
 JsonValue JsonValue::operator-(const int integer) const {
   switch (type) {
     case JsonType::JINT:
-      return value.intValue + integer;
+      return value.intValue - integer;
     case JsonType::JFLOAT:
-      return value.floatValue + static_cast<float>(integer);
+      return value.floatValue - static_cast<float>(integer);
     default:
       throw std::runtime_error("Attempted to subtract a JsonValue (JINT) from a non-numeric JsonValue");
   }
@@ -741,9 +741,9 @@ JsonValue JsonValue::operator-(const int integer) const {
 JsonValue JsonValue::operator-(const float fp) const {
   switch (type) {
     case JsonType::JFLOAT:
-      return value.floatValue + fp;
+      return value.floatValue - fp;
     case JsonType::JINT:
-      return static_cast<float>(value.intValue) + fp;
+      return static_cast<float>(value.intValue) - fp;
     default:
       throw std::runtime_error("Attempted to subtract a JsonValue (JFLOAT) from a non-numeric JsonValue");
   }
@@ -779,7 +779,7 @@ JsonValue& JsonValue::operator-=(const float fp) {
       value.floatValue -= fp;
       return *this;
     case JsonType::JINT:
-      setValue(static_cast<float>(value.intValue) + fp);
+      setValue(static_cast<float>(value.intValue) - fp);
       return *this;
     default:
       throw std::runtime_error("Attempted to subtract a float from a non-numeric JsonValue");

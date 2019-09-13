@@ -40,6 +40,7 @@ bool flagPassed(const unsigned int argc, const char** argv, const std::string& f
 void testArithmeticOperators(const bool shouldTestArithmeticOperators) {
   if (shouldTestArithmeticOperators) {
     printTestGroup("Addition operators", testAdditionOperators);
+    printTestGroup("Subtraction operators", testSubtractionOperators);
   }
 }
 

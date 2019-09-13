@@ -4,5 +4,6 @@
 #include "JsonValue.hpp"
 
 void testAdditionOperators(JsonValue&);
+void testSubtractionOperators(JsonValue&);
 
 #endif
