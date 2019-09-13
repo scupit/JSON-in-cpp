@@ -1,6 +1,8 @@
 #ifndef JSONVALUE_HPP
 #define JSONVALUE_HPP
 
+#define JFLOAT_TOLERANCE 0.0001
+
 #include <unordered_map>
 #include <vector>
 
@@ -205,6 +207,7 @@ class JsonValue {
     JsonValue& operator[](const std::string&);
 
   private:
+    static bool jfequal(const float, const float);
     void destroyCurrentValue();
     void typeChangeHelper(const JsonType);
 };

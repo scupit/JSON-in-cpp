@@ -301,7 +301,7 @@ bool JsonValue::operator==(const int otherIntValue) const {
     return value.intValue == otherIntValue;
   }
   else if (type == JsonType::JFLOAT) {
-    return value.floatValue == static_cast<float>(otherIntValue);
+    return jfequal(value.floatValue, static_cast<float>(otherIntValue));
   }
   else {
     throw std::runtime_error("Attempted to check if an int is equal to a JsonValue not of type JINT or JFLOAT");
@@ -310,10 +310,10 @@ bool JsonValue::operator==(const int otherIntValue) const {
 
 bool JsonValue::operator==(const float otherFloatValue) const {
   if (type == JsonType::JFLOAT) {
-    return value.floatValue == otherFloatValue;
+    return jfequal(value.floatValue ,otherFloatValue);
   }
   else if (type == JsonType::JINT) {
-    return static_cast<float>(value.intValue) == otherFloatValue;
+    return jfequal(static_cast<float>(value.intValue) ,otherFloatValue);
   }
   else {
     throw std::runtime_error("Attempted to check if a float is equal to a JsonValue not of type JFLOAT or JINT");
@@ -681,7 +681,7 @@ JsonValue& JsonValue::operator+=(const float fp) {
       value.floatValue += fp;
       break;
     case JsonType::JINT:
-      value.floatValue = static_cast<float>(value.intValue) + fp;
+      setValue(static_cast<float>(value.intValue) + fp);
       break;
     default:
       throw std::runtime_error("Attempted to add a float to a non-numeric JsonValue");
@@ -779,7 +779,7 @@ JsonValue& JsonValue::operator-=(const float fp) {
       value.floatValue -= fp;
       return *this;
     case JsonType::JINT:
-      value.floatValue = static_cast<float>(value.intValue) + fp;
+      setValue(static_cast<float>(value.intValue) + fp);
       return *this;
     default:
       throw std::runtime_error("Attempted to subtract a float from a non-numeric JsonValue");
@@ -861,7 +861,7 @@ JsonValue& JsonValue::operator*=(const float fp) {
       value.floatValue *= fp;
       return *this;
     case JsonType::JINT:
-      value.floatValue = static_cast<float>(value.intValue) * fp;
+      setValue(static_cast<float>(value.intValue) * fp);
       return *this;
     default:
       throw std::runtime_error("Attempted to multiply and assign a JsonValue of incompatible type by a float");
@@ -889,6 +889,7 @@ JsonValue JsonValue::operator/(const JsonValue& other) const {
         throw std::runtime_error("Attempted to divide and assign a JsonValue of incompatible type using a JsonValue (JFLOAT)");
     }
   }
+  throw std::runtime_error("Attempted to divide a JsonValue by a non-numeric JsonValue");
 }
 
 JsonValue JsonValue::operator/(const int integer) const {
@@ -944,11 +945,12 @@ JsonValue& JsonValue::operator/=(const float fp) {
       value.floatValue /= fp;
       break;
     case JsonType::JINT:
-      value.floatValue = static_cast<float>(value.intValue) / fp;
+      setValue(static_cast<float>(value.intValue) / fp);
       break;
     default:
       throw std::runtime_error("Attempted to divide and assign a JsonValue of incompatible type by a float");
   }
+  return *this;
 }
 
 // TODO: Implemend moduluses. apparently for floats c++ has an 'fmod' function. look into that.
@@ -1015,7 +1017,7 @@ JsonValue& JsonValue::operator%=(const int integer) {
       value.intValue %= integer;
       break;
     case JsonType::JFLOAT:
-      value.floatValue = std::fmod(value.floatValue, static_cast<float>(integer));
+      setValue(std::fmod(value.floatValue, static_cast<float>(integer)));
       break;
     default:
       throw std::runtime_error("Attempted to mod a non-numeric JsonValue by an int");
@@ -1026,10 +1028,10 @@ JsonValue& JsonValue::operator%=(const int integer) {
 JsonValue& JsonValue::operator%=(const float fp) {
   switch (type) {
     case JsonType::JFLOAT:
-      value.floatValue = std::fmod(value.floatValue, fp);
+      setValue(std::fmod(value.floatValue, fp));
       break;
     case JsonType::JINT:
-      value.floatValue = std::fmod(static_cast<float>(value.intValue), fp);
+      setValue(std::fmod(static_cast<float>(value.intValue), fp));
       break;
     default:
       throw std::runtime_error("Attempted to mod a non-numeric JsonValue by a float");
@@ -1057,6 +1059,10 @@ JsonValue& JsonValue::operator[](const std::string& key) {
   else {
     return valIter->second;
   }
+}
+
+bool JsonValue::jfequal(const float f1, const float f2) {
+  return std::abs(f1 - f2) <= JFLOAT_TOLERANCE;
 }
 
 // Only heap allocated values need to be destroyed.
