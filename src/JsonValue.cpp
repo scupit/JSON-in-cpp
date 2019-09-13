@@ -1,5 +1,6 @@
 #include "JsonValue.hpp"
 
+#include <cmath>
 #include <stdexcept>
 
 JsonValue::JsonValue(const std::nullptr_t nullType)
@@ -545,6 +546,21 @@ JsonValue& JsonValue::operator++() {
   }
 }
 
+bool JsonValue::operator!() {
+  switch (type) {
+    case JsonType::JBOOL:
+      return !value.boolValue;
+    case JsonType::JINT:
+      return !value.intValue;
+    case JsonType::JFLOAT:
+      return !value.floatValue;
+    case JsonType::JNULL:
+      return true;
+    default:
+      throw std::runtime_error("Attempted to logical 'not' an invalid type");
+  }
+}
+
 JsonValue JsonValue::operator++(int) {
   JsonValue before = *this;
   ++(*this);
@@ -568,6 +584,457 @@ JsonValue JsonValue::operator--(int) {
   JsonValue before = *this;
   ++(*this);
   return before;
+}
+
+JsonValue JsonValue::operator+(const JsonValue& other) const {
+  if (other.type == JsonType::JINT) {
+    switch (type) {
+      case JsonType::JINT:
+        return value.intValue + other.value.intValue;
+      case JsonType::JFLOAT:
+        return value.floatValue + static_cast<float>(other.value.intValue);
+      default:
+        throw std::runtime_error("Attempted to add a valid JsonValue (JINT) to a non-numeric JsonValue");
+        break;
+    }
+  }
+  else if (other.type == JsonType::JFLOAT) {
+    switch (type) {
+      case JsonType::JINT:
+        return static_cast<float>(value.intValue) + other.value.floatValue;
+      case JsonType::JFLOAT:
+        return value.floatValue + other.value.floatValue;
+      default:
+        throw std::runtime_error("Attempted to add a valid JsonValue (JFLOAT) to a non-numeric JsonValue");
+        break;
+    }
+  }
+  throw std::runtime_error("Attempted to add a non-numeric JsonValue to another JsonValue");
+}
+
+JsonValue JsonValue::operator+(const int integer) const {
+  switch (type) {
+    case JsonType::JINT:
+      return value.intValue + integer;
+    case JsonType::JFLOAT:
+      return value.floatValue + static_cast<float>(integer); 
+    default:
+      throw std::runtime_error("Attempted to add a float to a non-numeric JsonValue");
+  }
+}
+
+JsonValue JsonValue::operator+(const float fp) const {
+  switch (type) {
+    case JsonType::JINT:
+      return static_cast<float>(value.intValue) + fp;
+    case JsonType::JFLOAT:
+      return value.floatValue + fp;
+    default:
+      throw std::runtime_error("Attempted to add a float to a non-numeric JsonValue");
+  }
+}
+
+std::string JsonValue::operator+(const char* str) const {
+  if (type == JsonType::JSTRING) {
+    return *value.stringValue + str;
+  }
+  throw std::runtime_error("Attempted to concatenate std::string with non-string JsonValue");
+}
+
+std::string JsonValue::operator+(const std::string& str) const {
+  if (type == JsonType::JSTRING) {
+    return *value.stringValue + str;
+  }
+  throw std::runtime_error("Attempted to concatenate std::string with non-string JsonValue");
+}
+
+JsonValue& JsonValue::operator+=(const JsonValue& other) {
+  switch (other.type) {
+    case JsonType::JINT:
+      return *this += other.value.intValue;
+    case JsonType::JFLOAT:
+      return *this += other.value.floatValue;
+    case JsonType::JSTRING:
+      return *this += *other.value.stringValue;
+    default:
+      throw std::runtime_error("Attempted to add and assign to incompatible JsonValue type"); 
+  }
+}
+
+JsonValue& JsonValue::operator+=(const int integer) {
+  switch (type) {
+    case JsonType::JINT:
+      value.intValue += integer;
+      break;
+    case JsonType::JFLOAT:
+      value.floatValue += static_cast<float>(integer);
+      break;
+    default:
+      throw std::runtime_error("Attempted to add an int to non-numeric JsonValue");
+  }
+  return *this;
+}
+
+JsonValue& JsonValue::operator+=(const float fp) {
+  switch (type) {
+    case JsonType::JFLOAT:
+      value.floatValue += fp;
+      break;
+    case JsonType::JINT:
+      value.floatValue = static_cast<float>(value.intValue) + fp;
+      break;
+    default:
+      throw std::runtime_error("Attempted to add a float to a non-numeric JsonValue");
+  }
+  return *this;
+}
+
+JsonValue& JsonValue::operator+=(const char* str) {
+  if (type == JsonType::JSTRING) {
+    *value.stringValue += str;
+  }
+  throw std::runtime_error("Attempted to add a const char* to a non-string JsonValue");
+}
+
+JsonValue& JsonValue::operator+=(const std::string& str) {
+  if (type == JsonType::JSTRING) {
+    *value.stringValue += str;
+  }
+  throw std::runtime_error("Attempted to add an std::string to a non-string JsonValue");
+}
+
+JsonValue JsonValue::operator-(const JsonValue& other) const {
+  if (other.type == JsonType::JINT) {
+    switch (type) {
+      case JsonType::JINT:
+        return value.intValue + other.value.intValue;
+      case JsonType::JFLOAT:
+        return value.floatValue + static_cast<float>(other.value.intValue);
+      default:
+        throw std::runtime_error("Attempted to subtract a JsonValue (JINT) from a non-numeric JsonValue");
+    }
+  }
+  else if (other.type == JsonType::JFLOAT) {
+    switch (type) {
+      case JsonType::JFLOAT:
+        return value.floatValue + other.value.floatValue;
+      case JsonType::JINT:
+        return static_cast<float>(value.intValue) + other.value.floatValue;
+      default:
+        throw std::runtime_error("Attempted to subtract a JsonValue (JFLOAT) from a non-numeric JsonValue");
+    }
+  }
+  throw std::runtime_error("Attempted to subtract a non-numeric JsonValue from anothjer JsonValue");
+}
+
+JsonValue JsonValue::operator-(const int integer) const {
+  switch (type) {
+    case JsonType::JINT:
+      return value.intValue + integer;
+    case JsonType::JFLOAT:
+      return value.floatValue + static_cast<float>(integer);
+    default:
+      throw std::runtime_error("Attempted to subtract a JsonValue (JINT) from a non-numeric JsonValue");
+  }
+}
+
+JsonValue JsonValue::operator-(const float fp) const {
+  switch (type) {
+    case JsonType::JFLOAT:
+      return value.floatValue + fp;
+    case JsonType::JINT:
+      return static_cast<float>(value.intValue) + fp;
+    default:
+      throw std::runtime_error("Attempted to subtract a JsonValue (JFLOAT) from a non-numeric JsonValue");
+  }
+}
+
+JsonValue& JsonValue::operator-=(const JsonValue& other) {
+  switch (other.type) {
+    case JsonType::JINT:
+      return *this -= other.value.intValue;
+    case JsonType::JFLOAT:
+      return *this -= other.value.floatValue;
+    default:
+      throw std::runtime_error("Attempted to subtract a non-numeric JsonValue from another JsonValue");
+  }
+}
+
+JsonValue& JsonValue::operator-=(const int integer) {
+  switch (type) {
+    case JsonType::JINT:
+      value.intValue -= integer;
+      return *this;
+    case JsonType::JFLOAT:
+      value.floatValue -= static_cast<float>(integer);
+      return *this;
+    default:
+      throw std::runtime_error("Attempted to subtract an int from a non-numeric JsonValue");
+  }
+}
+
+JsonValue& JsonValue::operator-=(const float fp) {
+  switch (type) {
+    case JsonType::JFLOAT:
+      value.floatValue -= fp;
+      return *this;
+    case JsonType::JINT:
+      value.floatValue = static_cast<float>(value.intValue) + fp;
+      return *this;
+    default:
+      throw std::runtime_error("Attempted to subtract a float from a non-numeric JsonValue");
+  }
+}
+
+JsonValue JsonValue::operator*(const JsonValue& other) const {
+  if (other.type == JsonType::JINT) {
+    switch (type) {
+      case JsonType::JINT:
+        return value.intValue * other.value.intValue;
+      case JsonType::JFLOAT:
+        return value.floatValue * static_cast<float>(other.value.intValue);
+      default:
+        throw std::runtime_error("Attempted to multiply an incompatible JsonValue by a JsonValue (JINT)");
+    }
+  }
+  else if (other.type == JsonType::JFLOAT) {
+    switch (type) {
+      case JsonType::JFLOAT:
+        return value.floatValue * other.value.floatValue;
+      case JsonType::JINT:
+        return static_cast<float>(value.intValue) * other.value.floatValue;
+      default:
+        throw std::runtime_error("Attempted to multiply an incompatible JsonValue by a JsonValue (JFLOAT)");
+    }
+  }
+  throw std::runtime_error("Attempted to multiply a JsonValue by an incompatible type JsonValue");
+}
+
+JsonValue JsonValue::operator*(const int integer) const {
+  switch (type) {
+    case JsonType::JINT:
+      return value.intValue * integer;
+    case JsonType::JFLOAT:
+      return value.floatValue * static_cast<float>(integer);
+    default:
+      throw std::runtime_error("Attempted to multiply an incompatible JsonValue by a JsonValue (JINT)");
+  }
+}
+
+JsonValue JsonValue::operator*(const float fp) const {
+  switch (type) {
+    case JsonType::JFLOAT:
+      return value.floatValue * fp;
+    case JsonType::JINT:
+      return static_cast<float>(value.intValue) * fp;
+    default:
+      throw std::runtime_error("Attempted to multiply an incompatible JsonValue by a JsonValue (JFLOAT)");
+  }
+}
+
+JsonValue& JsonValue::operator*=(const JsonValue& other) {
+  switch (other.type) {
+    case JsonType::JINT:
+      return *this *= other.value.intValue;
+    case JsonType::JFLOAT:
+      return *this *= other.value.floatValue;
+    default:
+      throw std::runtime_error("Attempted to multiply and assign a JsonValue using an incompatible JsonValue type");
+  }
+}
+
+JsonValue& JsonValue::operator*=(const int integer) {
+  switch (type) {
+    case JsonType::JINT:
+      value.intValue *= integer;
+      return *this;
+    case JsonType::JFLOAT:
+      value.floatValue *= static_cast<float>(integer);
+    default:
+      throw std::runtime_error("Attempted to multiply and assign a JsonValue of incompatible type by an int");
+  }
+}
+
+JsonValue& JsonValue::operator*=(const float fp) {
+  switch (type) {
+    case JsonType::JFLOAT:
+      value.floatValue *= fp;
+      return *this;
+    case JsonType::JINT:
+      value.floatValue = static_cast<float>(value.intValue) * fp;
+      return *this;
+    default:
+      throw std::runtime_error("Attempted to multiply and assign a JsonValue of incompatible type by a float");
+  }
+}
+
+JsonValue JsonValue::operator/(const JsonValue& other) const {
+  if (other.type == JsonType::JINT) {
+    switch (type) {
+      case JsonType::JINT:
+        return value.intValue / other.value.intValue;
+      case JsonType::JFLOAT:
+        return value.floatValue / static_cast<float>(other.value.intValue);
+      default:
+        throw std::runtime_error("Attempted to divide and assign a JsonValue of incompatible type using a JsonValue (JINT)");
+    }
+  }
+  else if (other.type == JsonType::JFLOAT) {
+    switch (type) {
+      case JsonType::JFLOAT:
+        return value.floatValue / other.value.floatValue;
+      case JsonType::JINT:
+        return static_cast<float>(value.intValue) / other.value.floatValue;
+      default:
+        throw std::runtime_error("Attempted to divide and assign a JsonValue of incompatible type using a JsonValue (JFLOAT)");
+    }
+  }
+}
+
+JsonValue JsonValue::operator/(const int integer) const {
+  switch (type) {
+    case JsonType::JINT:
+      return value.intValue / integer;
+    case JsonType::JFLOAT:
+      return value.floatValue / static_cast<float>(integer);
+    default:
+      throw std::runtime_error("Attempted to divide and assign a JsonValue of incompatible type by an int");
+  }
+}
+
+JsonValue JsonValue::operator/(const float fp) const {
+  switch (type) {
+    case JsonType::JFLOAT:
+      return value.floatValue / fp;
+    case JsonType::JINT:
+      return static_cast<float>(value.intValue) / fp;
+    default:
+      throw std::runtime_error("Attempted to divide and assign a JsonValue of incompatible type by a float");
+  }
+}
+
+JsonValue& JsonValue::operator/=(const JsonValue& other) {
+  switch (other.type) {
+    case JsonType::JINT:
+      return *this /= other.value.intValue;
+    case JsonType::JFLOAT:
+      return *this /= other.value.floatValue;
+    default:
+      throw std::runtime_error("Attempted to divide and assign a JsonValue by a JsonValue of incompatible type");
+  }
+}
+
+JsonValue& JsonValue::operator/=(const int integer) {
+  switch (type) {
+    case JsonType::JINT:
+      value.intValue /= integer;
+      break;
+    case JsonType::JFLOAT:
+      value.floatValue /= static_cast<float>(integer);
+      break;
+    default:
+      throw std::runtime_error("Attempted to divide and assign a JsonValue of incompatible type by an int");
+  }
+  return *this;
+}
+
+JsonValue& JsonValue::operator/=(const float fp) {
+  switch (type) {
+    case JsonType::JFLOAT:
+      value.floatValue /= fp;
+      break;
+    case JsonType::JINT:
+      value.floatValue = static_cast<float>(value.intValue) / fp;
+      break;
+    default:
+      throw std::runtime_error("Attempted to divide and assign a JsonValue of incompatible type by a float");
+  }
+}
+
+// TODO: Implemend moduluses. apparently for floats c++ has an 'fmod' function. look into that.
+JsonValue JsonValue::operator%(const JsonValue& other) const {
+  if (other.type == JsonType::JINT) {
+    switch (type) {
+      case JsonType::JINT:
+        return value.intValue % other.value.intValue;
+      case JsonType::JFLOAT:
+        return std::fmod(value.floatValue, static_cast<float>(other.value.intValue));
+      default:
+        throw std::runtime_error("Attempted to mod a JsonValue of non-numeric type by another JsonValue (JINT)");
+    }
+  }
+  else if (other.type == JsonType::JFLOAT) {
+    switch (type) {
+      case JsonType::JFLOAT:
+        return std::fmod(value.floatValue, other.value.floatValue);
+      case JsonType::JINT:
+        return std::fmod(static_cast<float>(value.intValue), other.value.floatValue);
+      default:
+        throw std::runtime_error("Attempted to mod a JsonValue of non-numeric type by another JsonValue (JFLOAT)");
+    }
+  }
+  throw std::runtime_error("Attempted to mod a JsonValue by a JsonValue of non-numeric type");
+}
+
+JsonValue JsonValue::operator%(const int integer) const {
+  switch (type) {
+    case JsonType::JINT:
+      return value.intValue % integer;
+    case JsonType::JFLOAT:
+      return std::fmod(value.floatValue, static_cast<float>(integer));
+    default:
+      throw std::runtime_error("Attempted to mod a JsonValue of non-numeric type by an int");
+  }
+}
+
+JsonValue JsonValue::operator%(const float fp) const {
+  switch (type) {
+    case JsonType::JFLOAT:
+      return std::fmod(value.floatValue, fp);
+    case JsonType::JINT:
+      return std::fmod(static_cast<float>(value.intValue), fp);
+    default:
+      throw std::runtime_error("Attempted to mod a JsonValue of non-numeric type by a float");
+  }
+}
+
+JsonValue& JsonValue::operator%=(const JsonValue& other) {
+  switch (other.type) {
+    case JsonType::JINT:
+      return *this %= other.value.intValue;
+    case JsonType::JFLOAT:
+      return *this %= other.value.floatValue;
+    default:
+      throw std::runtime_error("Attempted to mod a JsonValue by a non-numeric JsonValue");
+  }
+}
+
+JsonValue& JsonValue::operator%=(const int integer) {
+  switch (type) {
+    case JsonType::JINT:
+      value.intValue %= integer;
+      break;
+    case JsonType::JFLOAT:
+      value.floatValue = std::fmod(value.floatValue, static_cast<float>(integer));
+      break;
+    default:
+      throw std::runtime_error("Attempted to mod a non-numeric JsonValue by an int");
+  }
+  return *this;
+}
+
+JsonValue& JsonValue::operator%=(const float fp) {
+  switch (type) {
+    case JsonType::JFLOAT:
+      value.floatValue = std::fmod(value.floatValue, fp);
+      break;
+    case JsonType::JINT:
+      value.floatValue = std::fmod(static_cast<float>(value.intValue), fp);
+      break;
+    default:
+      throw std::runtime_error("Attempted to mod a non-numeric JsonValue by a float");
+  }
+  return *this;
 }
 
 JsonValue& JsonValue::operator[](const int index) {

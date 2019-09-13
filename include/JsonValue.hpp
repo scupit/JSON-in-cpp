@@ -147,7 +147,6 @@ class JsonValue {
     friend bool operator>=(const int, const JsonValue&);
     friend bool operator>=(const float, const JsonValue&);
 
-    // Only for JsonValues which are holding a boolean
     bool operator!();
 
     JsonValue& operator++();
@@ -156,43 +155,47 @@ class JsonValue {
     JsonValue& operator--();
     JsonValue operator--(int);
 
-    JsonValue& operator+(const JsonValue&);
-    int operator+(const int);
-    float operator+(const float);
-    std::string operator+(const std::string&);
+    JsonValue operator+(const JsonValue&) const;
+    JsonValue operator+(const int) const;
+    JsonValue operator+(const float) const;
+    
+    // These two return std::strings because they only have one possible return type, unlike numerical addition.
+    std::string operator+(const std::string&) const;
+    std::string operator+(const char*) const;
 
     JsonValue& operator+=(const JsonValue&);
     JsonValue& operator+=(const int);
     JsonValue& operator+=(const float);
+    JsonValue& operator+=(const char*);
     JsonValue& operator+=(const std::string&);
 
-    JsonValue& operator-(const JsonValue&);
-    int operator-(const int);
-    float operator-(const float);
+    JsonValue operator-(const JsonValue&) const;
+    JsonValue operator-(const int) const;
+    JsonValue operator-(const float) const;
 
     JsonValue& operator-=(const JsonValue&);
     JsonValue& operator-=(const int);
     JsonValue& operator-=(const float);
 
-    JsonValue& operator*(const JsonValue&);
-    int operator*(const int);
-    float operator*(const float);
+    JsonValue operator*(const JsonValue&) const;
+    JsonValue operator*(const int) const;
+    JsonValue operator*(const float) const;
 
     JsonValue& operator*=(const JsonValue&);
     JsonValue& operator*=(const int);
     JsonValue& operator*=(const float);
 
-    JsonValue& operator/(const JsonValue&);
-    int operator/(const int);
-    float operator/(const float);
+    JsonValue operator/(const JsonValue&) const;
+    JsonValue operator/(const int) const;
+    JsonValue operator/(const float) const;
 
     JsonValue& operator/=(const JsonValue&);
     JsonValue& operator/=(const int);
     JsonValue& operator/=(const float);
 
-    JsonValue& operator%(const JsonValue&);
-    int operator%(const int);
-    float operator%(const float);
+    JsonValue operator%(const JsonValue&) const;
+    JsonValue operator%(const int) const;
+    JsonValue operator%(const float) const;
 
     JsonValue& operator%=(const JsonValue&);
     JsonValue& operator%=(const int);
