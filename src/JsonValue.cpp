@@ -847,25 +847,28 @@ JsonValue& JsonValue::operator*=(const int integer) {
   switch (type) {
     case JsonType::JINT:
       value.intValue *= integer;
-      return *this;
+      break;
     case JsonType::JFLOAT:
       value.floatValue *= static_cast<float>(integer);
+      break;
     default:
       throw std::runtime_error("Attempted to multiply and assign a JsonValue of incompatible type by an int");
   }
+  return *this;
 }
 
 JsonValue& JsonValue::operator*=(const float fp) {
   switch (type) {
     case JsonType::JFLOAT:
       value.floatValue *= fp;
-      return *this;
+      break;
     case JsonType::JINT:
       setValue(static_cast<float>(value.intValue) * fp);
-      return *this;
+      break;
     default:
       throw std::runtime_error("Attempted to multiply and assign a JsonValue of incompatible type by a float");
   }
+  return *this;
 }
 
 JsonValue JsonValue::operator/(const JsonValue& other) const {
