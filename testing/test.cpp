@@ -42,6 +42,7 @@ void testArithmeticOperators(const bool shouldTestArithmeticOperators) {
     printTestGroup("Addition operators", testAdditionOperators);
     printTestGroup("Subtraction operators", testSubtractionOperators);
     printTestGroup("Multiplication operators", testMultiplicationOperators);
+    printTestGroup("Division operators", testDivisionOperators);
   }
 }
 
