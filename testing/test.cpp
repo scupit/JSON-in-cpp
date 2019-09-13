@@ -18,8 +18,9 @@ void testValues(const bool);
 
 int main(int argc, const char** argv) {
   testAll(argc == 1, {
+    testValues,
     testOperators,
-    testValues
+    testArithmeticOperators
   });
 
   testArithmeticOperators(flagPassed(argc, argv, "-a"));
@@ -44,6 +45,7 @@ void testArithmeticOperators(const bool shouldTestArithmeticOperators) {
     printTestGroup("Multiplication operators", testMultiplicationOperators);
     printTestGroup("Division operators", testDivisionOperators);
     printTestGroup("Modulus operators", testModulusOperators);
+    printTestGroup("Incrementation operators", testIncrementOperators);
   }
 }
 

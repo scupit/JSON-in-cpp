@@ -486,3 +486,49 @@ void testModulusOperators(JsonValue& jVal) {
     jVal == 3.0f
   );
 }
+
+void testIncrementOperators(JsonValue& jVal) {
+  jVal = 0;
+
+  printTestResultStatus(
+    "Postfix incrementation with JINT",
+    jVal++ == 0
+  );
+
+  printTestResultStatus(
+    "Prefix incrementation with JINT",
+    ++jVal == 2
+  );
+
+  printTestResultStatus(
+    "Postfix decrementation with JINT",
+    jVal-- == 2
+  );
+  
+  printTestResultStatus(
+    "Prefix incrementation with JINT",
+    --jVal == 0
+  );
+
+  jVal = 0.0f;
+
+  printTestResultStatus(
+    "Postfix decrementation  with JFLOAT",
+    jVal++ == 0.0f
+  );
+
+  printTestResultStatus(
+    "Prefix incrementation with JFLOAT",
+    ++jVal == 2.0f
+  );
+
+  printTestResultStatus(
+    "Postfix decrementation with JFLOAT",
+    jVal-- == 2.0f
+  );
+  
+  printTestResultStatus(
+    "Prefix decrementation with JFLOAT",
+    --jVal == 0.0f
+  );
+}

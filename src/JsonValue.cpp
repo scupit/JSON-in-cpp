@@ -570,10 +570,10 @@ JsonValue JsonValue::operator++(int) {
 JsonValue& JsonValue::operator--() {
   switch (type) {
     case JsonType::JINT:
-      ++value.intValue;
+      --value.intValue;
       return *this;
     case JsonType::JFLOAT:
-      ++value.floatValue;
+      --value.floatValue;
       return *this;
     default:
       throw std::runtime_error("Attempted to decrement a JsonValue of non-numeric type");
@@ -582,7 +582,7 @@ JsonValue& JsonValue::operator--() {
 
 JsonValue JsonValue::operator--(int) {
   JsonValue before = *this;
-  ++(*this);
+  --(*this);
   return before;
 }
 

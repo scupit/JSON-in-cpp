@@ -9,4 +9,6 @@ void testMultiplicationOperators(JsonValue&);
 void testDivisionOperators(JsonValue&);
 void testModulusOperators(JsonValue&);
 
+void testIncrementOperators(JsonValue&);
+
 #endif
