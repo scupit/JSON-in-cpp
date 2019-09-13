@@ -7,5 +7,6 @@ void testAdditionOperators(JsonValue&);
 void testSubtractionOperators(JsonValue&);
 void testMultiplicationOperators(JsonValue&);
 void testDivisionOperators(JsonValue&);
+void testModulusOperators(JsonValue&);
 
 #endif

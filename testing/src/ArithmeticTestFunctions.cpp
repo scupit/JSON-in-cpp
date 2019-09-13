@@ -1,8 +1,6 @@
 #include "ArithmeticTestFunctions.hpp"
 #include "TestPrinterFunctions.hpp"
 
-#include <cstdio>
-
 void testAdditionOperators(JsonValue& jVal) {
   jVal = 12;
 
@@ -384,5 +382,107 @@ void testDivisionOperators(JsonValue& jVal) {
   printTestResultStatus(
     "Dividing and assigning JINT from JFLOAT (value)",
     jVal == 1.92f
+  );
+}
+
+void testModulusOperators(JsonValue& jVal) {
+  jVal = 123;
+
+  printTestResultStatus(
+    "Modding JINT by int literal",
+    jVal % 4 == 3
+  );
+
+  printTestResultStatus(
+    "Modding JINT by float literal",
+    jVal % 2.5f == 0.5000f
+  );
+
+  printTestResultStatus(
+    "Modding JINT by JINT",
+    jVal % JsonValue(4) == 3
+  );
+
+  printTestResultStatus(
+    "Modding JINT by JFLOAT",
+    jVal % JsonValue(2.5f) == 0.5000f
+  );
+
+  jVal %= 4;
+
+  printTestResultStatus(
+    "Modding and assigning int literal from JINT (type)",
+    jVal.getType() == JsonType::JINT
+  );
+
+  printTestResultStatus(
+    "Modding and assigning int literal from JINT (value)",
+    jVal == 3
+  );
+
+  jVal = 123;
+  jVal %= 2.5f;
+
+  printTestResultStatus(
+    "Modding and assigning float literal from JINT (type)",
+    jVal.getType() == JsonType::JFLOAT
+  );
+
+  printTestResultStatus(
+    "Modding and assigning float literal from JINT (value)",
+    jVal == 0.5000f
+  );
+
+
+  jVal = 123.0f;
+  jVal %= 2.5f;
+
+  printTestResultStatus(
+    "Modding and assigning float literal from JFLOAT (type)",
+    jVal.getType() == JsonType::JFLOAT
+  );
+
+  printTestResultStatus(
+    "Modding and assigning float literal from JFLOAT (value)",
+    jVal == 0.5000f
+  );
+
+  jVal = 123.0f;
+  jVal %= 4;
+
+  printTestResultStatus(
+    "Modding and assigning int literal from JFLOAT (type)",
+    jVal.getType() == JsonType::JFLOAT
+  );
+
+  printTestResultStatus(
+    "Modding and assigning int literal from JFLOAT (value)",
+    jVal == 3.0f
+  );
+
+  jVal = 123.0f;
+  jVal %= JsonValue(2.5f);
+
+  printTestResultStatus(
+    "Modding and assigning JFLOAT from JFLOAT (type)",
+    jVal.getType() == JsonType::JFLOAT
+  );
+
+  printTestResultStatus(
+    "Modding and assigning JFLOAT from JFLOAT (value)",
+    jVal == 0.5000f
+  );
+
+  jVal = 123.0f;
+  jVal %= JsonValue(4);
+
+  printTestResultStatus(
+    "Modding and assigning JINT from JFLOAT (type)",
+    jVal.getType() == JsonType::JFLOAT
+  );
+
+  printTestResultStatus(
+    "Modding and assigning JINT from JFLOAT (value)",
+    jVal == 3.0f
   );
 }
