@@ -5,10 +5,35 @@ using namespace std;
 
 int main(void) {
 
-  JsonValue val(JsonType::JFLOAT);
-  val.setValue(10.5f);
-  
-  cout << val.getAsFloat() << endl;
+  JsonValue jVal({
+    {"hello", "Noice thing"},
+    {"Very nice plan", "other place"},
+    {"An Array", JsonValue(
+      {
+        12,
+        3,
+        "someone",
+        nullptr,
+        false,
+        true,
+        false,
+        JsonValue({
+          {"This object is in the array", nullptr},
+          {"Noice", 10}
+        })
+      }
+    )},
+    {"Another Object", JsonValue(
+      {
+        {"Key in that object", "very nice"},
+        {"You", 12.3f},
+        {"boolean", true}
+      }
+    )},
+    {"Should be null", nullptr}
+  });
+
+  cout << jVal << endl;
 
   return 0;
 }

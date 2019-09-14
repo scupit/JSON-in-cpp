@@ -1,6 +1,8 @@
 #include "JsonValue.hpp"
 
 #include <cmath>
+#include <iostream>
+#include <sstream>
 #include <stdexcept>
 
 JsonValue::JsonValue(const std::nullptr_t nullType)
@@ -205,6 +207,22 @@ JsonObject& JsonValue::getAsMap() {
     throw std::runtime_error("Tried to get JsonValue value as JsonObject (std::unordered_map), when it is not type JOBJECT.");
   }
   return *value.objectValue;
+}
+
+std::string JsonValue::stringify() {
+  std::string str;
+  stringify(str);
+  return str;
+}
+
+void JsonValue::stringify(std::string& destinationString){
+  std::stringstream strIn;
+  stringifyHelper(strIn, 0);
+  destinationString = strIn.str();
+}
+
+void JsonValue::stringify(std::ostream& out) {
+  stringifyHelper(out, 0);
 }
 
 bool JsonValue::typeMatches(const JsonValue& other) const {
@@ -1064,6 +1082,11 @@ JsonValue& JsonValue::operator[](const std::string& key) {
   }
 }
 
+std::ostream& operator<<(std::ostream& out, JsonValue& jVal) {
+  jVal.stringify(out);
+  return out;
+}
+
 bool JsonValue::jfequal(const float f1, const float f2) {
   return std::abs(f1 - f2) <= JFLOAT_TOLERANCE;
 }
@@ -1082,6 +1105,76 @@ void JsonValue::destroyCurrentValue() {
       break;
     default:
       break;
+  }
+}
+
+void JsonValue::stringifyHelper(std::ostream& out, const unsigned short tabLevel, const bool isObjAttr) {
+  if (!isObjAttr && tabLevel > 0) {
+    out << std::endl;
+    writeTabs(out, tabLevel);
+  }
+
+  if (type == JsonType::JOBJECT) {
+    unsigned int mapSize = value.objectValue->size();
+
+    out << '{';
+
+    if (mapSize == 0) {
+      out << ' ' << '}';
+    }
+    else {
+      out << std::endl;
+      for (auto& keyPair : *value.objectValue) {
+        if (keyPair.second.getType() != JsonType::JINVALID) {
+          writeTabs(out, tabLevel + 1);
+          out << '"' << keyPair.first << '"' << ':' << ' ';
+          keyPair.second.stringifyHelper(out, tabLevel + 1, true);
+
+          if (--mapSize > 0) {
+            out << ',';
+          }
+          out << std::endl;
+        }
+      }
+      
+      writeTabs(out, tabLevel);
+      out << '}';
+    }
+  }
+  else if (type == JsonType::JARRAY) {
+    unsigned int arrSize = value.arrayValue->size();
+
+    out << '[';
+
+    if (arrSize == 0) {
+      out << ' ' << ']';
+    }
+    else {
+      for (JsonValue& item : *value.arrayValue) {
+        item.stringifyHelper(out, tabLevel + 1);
+        if (--arrSize > 0) {
+          out << ',';
+        }
+      }
+      out << std::endl;
+      writeTabs(out, tabLevel);
+      out << ']';
+    }
+  }
+  else if (type == JsonType::JSTRING) {
+    out << '"' << *value.stringValue << '"';
+  }
+  else if (type == JsonType::JINT) {
+    out << value.intValue;
+  }
+  else if (type == JsonType::JFLOAT) {
+    out << value.floatValue;
+  }
+  else if (type == JsonType::JBOOL) {
+    out << (value.boolValue ? "true" : "false");
+  }
+  else if (type == JsonType::JNULL) {
+    out << "null";
   }
 }
 
@@ -1108,6 +1201,12 @@ void JsonValue::typeChangeHelper(const JsonType newType) {
       break;
     default:
       break;
+  }
+}
+
+void JsonValue::writeTabs(std::ostream& out, unsigned short numTabs) {
+  while (numTabs-- > 0) {
+    out << '\t';
   }
 }
 

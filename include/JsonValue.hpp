@@ -3,6 +3,7 @@
 
 #define JFLOAT_TOLERANCE 0.0001
 
+#include <iostream>
 #include <unordered_map>
 #include <vector>
 
@@ -46,7 +47,7 @@ class JsonValue {
     JsonValue(const JsonType);
     JsonValue(const int);
     JsonValue(const float);
-    explicit JsonValue(const bool);
+    JsonValue(const bool);
     JsonValue(const char*);
     JsonValue(const std::string&);
     JsonValue(const JsonArray&);
@@ -75,6 +76,13 @@ class JsonValue {
     std::string& getAsString();
     JsonArray& getAsVector();
     JsonObject& getAsMap();
+
+    // This stringify is not recommended.
+    std::string stringify();
+    
+    // Use one of these instead
+    void stringify(std::string&);
+    void stringify(std::ostream&);
 
     bool typeMatches(const JsonValue&) const;
 
@@ -206,10 +214,14 @@ class JsonValue {
     JsonValue& operator[](const int);
     JsonValue& operator[](const std::string&);
 
+    friend std::ostream& operator<<(std::ostream&, JsonValue&);
+
   private:
     static bool jfequal(const float, const float);
     void destroyCurrentValue();
+    void stringifyHelper(std::ostream&, const unsigned short, const bool = false);
     void typeChangeHelper(const JsonType);
+    static void writeTabs(std::ostream&, unsigned short);
 };
 
 bool operator==(const JsonArray&, const JsonArray&);
