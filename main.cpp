@@ -11,7 +11,7 @@ int main(void) {
     {"An Array", JsonValue(
       {
         12,
-        3,
+        -32.736f,
         "someone",
         nullptr,
         false,
@@ -19,7 +19,7 @@ int main(void) {
         false,
         JsonValue({
           {"This object is in the array", nullptr},
-          {"Noice", 10}
+          {"Noice", -10}
         })
       }
     )},

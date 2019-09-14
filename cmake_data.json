@@ -4,50 +4,41 @@
 
   "default_cpp_standard": "11",
 
-  "allowed_c_standards": [
-    "11"
-  ],
-
-  "allowed_cpp_standards": [
-    "11"
-  ],
+  "allowed_c_standards": [ "11" ],
+  "allowed_cpp_standards": [ "11" ],
 
   "output": {
+    "jparser": {
+      "type": "static_lib",
+      "r_source_dirs": [ "src" ],
+      "r_header_dirs": [ "include" ],
+      "r_include_dirs":[ "include" ],
+      "archive_output_dir": "lib",
+      "library_output_dir": "lib"
+    },
     "test": {
       "type": "executable",
       "base_file": "testing/test.cpp",
-      "r_source_dirs": [
-        "src",
-        "testing/src"
-      ],
-      "r_header_dirs": [
-        "include",
-        "testing/include"
-      ],
-      "r_include_dirs": [
-        "include",
-        "testing/include"
-      ],
+      "r_source_dirs": [ "testing/src" ],
+      "r_header_dirs": [ "testing/include" ],
+      "r_include_dirs": [ "testing/include" ],
       "executable_output_dir": "bin"
     },
     "json_parser": {
       "type": "executable",
       "base_file": "main.cpp",
-      "r_source_dirs": [
-        "src"
-      ],
-      "r_header_dirs": [
-        "include"
-      ],
-      "r_include_dirs": [
-        "include"
-      ],
+      "r_source_dirs": [ ],
+      "r_header_dirs": [ ],
+      "r_include_dirs": [ ],
       "executable_output_dir": "bin"
     }
   },
 
   "imported_libs": {},
-  "link_libs": {},
+  "link_libs": {
+    "test": [ "jparser" ],
+    "json_parser": [ "jparser" ]
+  },
 
   "targets": {
     "debug": {
