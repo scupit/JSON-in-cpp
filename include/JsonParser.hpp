@@ -28,6 +28,9 @@ class JsonParser {
 
     inline bool isDigit(char c) { return c >= '0' && c <= '9'; }
     bool seqEqLineAtCurrentIndex(const std::string&);
+    void parseInto(JsonValue&, const ParseType);
+    std::string parseKey(ParseType&);
+    void traverseParseIndexToEndingQuote();
   
   public:
     JsonParser(const std::string&);
@@ -35,7 +38,7 @@ class JsonParser {
     
   protected:
     bool currentPositionValid();
-    ParseType indicateNextType(const char = '\\');
+    ParseType determineNextType(const char = '\\');
     void parseArray(JsonValue&);
     void parseTrue(JsonValue&);
     void parseFalse(JsonValue&);

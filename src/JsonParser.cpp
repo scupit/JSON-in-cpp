@@ -8,11 +8,36 @@ JsonParser::JsonParser(const std::string& fileName)
 
 void JsonParser::parseNewFile(const std::string& fileName) {
   fin = std::ifstream(fileName);
-  json = JsonValue();
   currentParseIndex = 0;
 
-  while(currentPositionValid()) {
-    const ParseType type = indicateNextType();
+  parseInto(json = JsonValue(), determineNextType());
+  fin.close();
+}
+
+// Middle function between parsing, determines which function to call based on the parse type
+void JsonParser::parseInto(JsonValue& jsonIn, const ParseType typeToParse) {
+  switch (typeToParse) {
+    case ParseType::JSTRING:
+      parseNumber(jsonIn);
+      break;
+    case ParseType::JARRAY:
+      parseArray(jsonIn);
+      break;
+    case ParseType::JOBJECT:
+      parseObject(jsonIn);
+      break;
+    case ParseType::JNUMBER:
+      parseNumber(jsonIn);
+      break;
+    case ParseType::JNULL:
+      parseNull(jsonIn);
+      break;
+    case ParseType::JTRUE:
+      parseTrue(jsonIn);
+      break;
+    case ParseType::JFALSE:
+      parseFalse(jsonIn);
+      break;
   }
 }
 
@@ -29,7 +54,7 @@ bool JsonParser::currentPositionValid() {
   }
 }
 
-ParseType JsonParser::indicateNextType(const char typeCloseChar) {
+ParseType JsonParser::determineNextType(const char typeCloseChar) {
   while(currentPositionValid()) {
     const char currentChar = line[currentParseIndex++];
 
@@ -41,7 +66,6 @@ ParseType JsonParser::indicateNextType(const char typeCloseChar) {
       case '"': return ParseType::JSTRING;
       case '[': return ParseType::JARRAY;
       case ',': return ParseType::JNEXTITEM;
-      default: break;
     }
 
     if (isDigit(currentChar))
@@ -101,22 +125,33 @@ void JsonParser::parseNumber(JsonValue& jsonIn) {
   }
 }
 
-void parseObject(JsonValue&);
+// ParseType 'next item' is currently not used
+void JsonParser::parseObject(JsonValue& jsonIn) {
+  ParseType nextType;
+  jsonIn.changeType(JsonType::JOBJECT);
+
+  // While the next type is not the end of the object
+  while((nextType = determineNextType()) != ParseType::JENDITEM) {
+    if (nextType == ParseType::JSTRING) {
+      // Parses the next item into the JsonObject added to jsonIn.
+      parseInto(jsonIn[parseKey(nextType)], nextType);
+    }
+  }
+
+}
+
 void JsonParser::parseString(JsonValue& jsonIn) {
   const unsigned int initialStringIndex = currentParseIndex;
-
-  while (line[currentParseIndex] != '"') {
-    if (line[currentParseIndex] == '\\') {
-      ++currentParseIndex;
-    }
-    ++currentParseIndex;
-  }
+  traverseParseIndexToEndingQuote();
 
   // currentParseIndex is the index of the string's ending quote.
   // If the index is unchanged, assumed to be an empty string.
   jsonIn = initialStringIndex == currentParseIndex
     ? ""
     : line.substr(initialStringIndex, currentParseIndex - initialStringIndex);
+
+  // Set parse index to the next character, so that the next type to parse can be
+  // correctly determined
   ++currentParseIndex;
 }
 
@@ -132,10 +167,38 @@ void JsonParser::setInt(JsonValue& jsonIn, const unsigned int startIndex, const 
 // PRIVATE
 // ################################################################################ 
 
+// Should only be called when parsing an object key.
+// Sets the next parse tyoe by reference for ease of access when parsing an object
+std::string JsonParser::parseKey(ParseType& nextParseType) {
+  const unsigned int initialIndex = currentParseIndex;
+  traverseParseIndexToEndingQuote();
+  const unsigned int endingQuoteIndex = currentParseIndex;
+
+  // Sets the current parsing character to the one after the colon, so that the next
+  // type to be parsed can be correctly determined.
+  while (line[currentParseIndex++] != ':');
+
+  // Set the next type to be parsed
+  nextParseType = determineNextType();
+
+  return line.substr(initialIndex, currentParseIndex - initialIndex);
+}
+
 bool JsonParser::seqEqLineAtCurrentIndex(const std::string& strToMatch) {
   for (int i = 0; i < strToMatch.length(); ++i) {
     if (line[currentParseIndex++] != strToMatch[i])
       return false;
   }
   return true;
+}
+
+// currentParseIndex will be on the string's ending quote.
+// ONLY USED WHEN PARSING A STRING
+void JsonParser::traverseParseIndexToEndingQuote() {
+  while (line[currentParseIndex] != '"') {
+    if (line[currentParseIndex] == '\\') {
+      ++currentParseIndex;
+    }
+    ++currentParseIndex;
+  }
 }
