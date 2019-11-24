@@ -4,8 +4,8 @@ project( json_parser_improved )
 set( JPARSER_SOURCES
 	${PROJECT_SOURCE_DIR}/src/JsonParser.cpp
 	${PROJECT_SOURCE_DIR}/src/JsonValue.cpp
-	${PROJECT_SOURCE_DIR}/include/JsonValue.hpp
 	${PROJECT_SOURCE_DIR}/include/JsonParser.hpp
+	${PROJECT_SOURCE_DIR}/include/JsonValue.hpp
 )
 
 add_library( jparser STATIC ${JPARSER_SOURCES} )
@@ -22,15 +22,36 @@ set_target_properties( jparser
 	LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}
 )
 
+set( JPARSER_SHARED_SOURCES
+	${PROJECT_SOURCE_DIR}/src/JsonParser.cpp
+	${PROJECT_SOURCE_DIR}/src/JsonValue.cpp
+	${PROJECT_SOURCE_DIR}/include/JsonParser.hpp
+	${PROJECT_SOURCE_DIR}/include/JsonValue.hpp
+)
+
+add_library( jparser_shared SHARED ${JPARSER_SHARED_SOURCES} )
+
+set( jparser_shared_INCLUDE_DIRS
+	${PROJECT_SOURCE_DIR}/include/
+)
+
+target_include_directories( jparser_shared PRIVATE ${jparser_shared_INCLUDE_DIRS} )
+
+set_target_properties( jparser_shared
+	PROPERTIES
+	ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}
+	LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE}
+)
+
 set( TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/testing/test.cpp
-	${PROJECT_SOURCE_DIR}/testing/src/JsonValueTestFunctions.cpp
-	${PROJECT_SOURCE_DIR}/testing/src/TestPrinterFunctions.cpp
-	${PROJECT_SOURCE_DIR}/testing/src/OperatorTestFunctions.cpp
 	${PROJECT_SOURCE_DIR}/testing/src/ArithmeticTestFunctions.cpp
+	${PROJECT_SOURCE_DIR}/testing/src/TestPrinterFunctions.cpp
+	${PROJECT_SOURCE_DIR}/testing/src/JsonValueTestFunctions.cpp
+	${PROJECT_SOURCE_DIR}/testing/src/OperatorTestFunctions.cpp
 	${PROJECT_SOURCE_DIR}/testing/include/JsonValueTestFunctions.hpp
-	${PROJECT_SOURCE_DIR}/testing/include/TestPrinterFunctions.hpp
 	${PROJECT_SOURCE_DIR}/testing/include/ArithmeticTestFunctions.hpp
+	${PROJECT_SOURCE_DIR}/testing/include/TestPrinterFunctions.hpp
 	${PROJECT_SOURCE_DIR}/testing/include/OperatorTestFunctions.hpp
 	${jparser_HEADER_FILES}
 )

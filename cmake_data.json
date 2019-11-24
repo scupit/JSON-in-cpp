@@ -16,6 +16,14 @@
       "archive_output_dir": "lib",
       "library_output_dir": "lib"
     },
+    "jparser_shared": {
+      "type": "shared_lib",
+      "r_source_dirs": [ "src" ],
+      "r_header_dirs": [ "include" ],
+      "r_include_dirs": [ "include" ],
+      "archive_output_dir": "lib",
+      "library_output_dir": "lib"
+    },
     "test": {
       "type": "executable",
       "base_file": "testing/test.cpp",
