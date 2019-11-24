@@ -35,6 +35,9 @@ class JsonParser {
   public:
     JsonParser(const std::string&);
     void parseNewFile(const std::string&);
+    void parseNewFile(const std::string&, JsonValue&, const bool = false);
+    inline JsonValue getJsonCopy() { return json; }
+    inline JsonValue& getJsonReference() { return json; }
     
   protected:
     bool currentPositionValid();

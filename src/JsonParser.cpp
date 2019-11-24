@@ -7,11 +7,19 @@ JsonParser::JsonParser(const std::string& fileName)
 }
 
 void JsonParser::parseNewFile(const std::string& fileName) {
+  parseNewFile(fileName, json = JsonValue());
+}
+
+void JsonParser::parseNewFile(const std::string& fileName, JsonValue& jsonIn, const bool shouldCopyIntoLocalJson) {
   fin = std::ifstream(fileName);
   currentParseIndex = 0;
 
-  parseInto(json = JsonValue(), determineNextType());
+  parseInto(jsonIn, determineNextType());
   fin.close();
+
+  if (shouldCopyIntoLocalJson) {
+    json = jsonIn;
+  }
 }
 
 // Middle function between parsing, determines which function to call based on the parse type
