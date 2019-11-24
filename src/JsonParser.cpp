@@ -157,8 +157,8 @@ void JsonParser::parseObject(JsonValue& jsonIn) {
   while((nextType = determineNextType('}')) != ParseType::JENDITEM) {
     if (nextType == ParseType::JSTRING) {
       // Parses the next item into the JsonObject added to jsonIn.
-      std::string key = parseKey(nextType);
-      parseInto(jsonIn[key], nextType);
+      const std::string key = parseKey();
+      parseInto(jsonIn[key], determineNextType());
     }
   }
 }
@@ -191,8 +191,9 @@ void JsonParser::setInt(JsonValue& jsonIn, const unsigned int startIndex, const 
 // ################################################################################ 
 
 // Should only be called when parsing an object key.
-// Sets the next parse tyoe by reference for ease of access when parsing an object
-std::string JsonParser::parseKey(ParseType& nextParseType) {
+// NOTE: The very next 'determineNextType()' after this function will return the object value 
+// type to be parsed. 
+const std::string JsonParser::parseKey() {
   const unsigned int initialIndex = currentParseIndex;
   traverseParseIndexToEndingQuote();
   const unsigned int endingQuoteIndex = currentParseIndex;
@@ -200,13 +201,10 @@ std::string JsonParser::parseKey(ParseType& nextParseType) {
   // Sets the current parsing character to the one after the colon, so that the next
   // type to be parsed can be correctly determined.
   while (line[currentParseIndex++] != ':');
-
-  // Set the next type to be parsed
-  nextParseType = determineNextType();
-
   return line.substr(initialIndex, endingQuoteIndex - initialIndex);
 }
 
+// Sequential string equality, which also increments the currentParseIndex
 bool JsonParser::seqEqLineAtCurrentIndex(const std::string& strToMatch) {
   for (int i = 0; i < strToMatch.length(); ++i) {
     if (line[currentParseIndex++] != strToMatch[i])
