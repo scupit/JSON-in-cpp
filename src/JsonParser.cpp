@@ -133,7 +133,12 @@ void JsonParser::parseNull(JsonValue& jsonIn) {
 }
 
 void JsonParser::parseNumber(JsonValue& jsonIn) {
-  const unsigned int initialCharIndex = currentParseIndex - 1;
+  unsigned int initialCharIndex = currentParseIndex - 1;
+
+  // Detect negatives
+  if (initialCharIndex >= 1 && line[initialCharIndex - 1] == '-') {
+    --initialCharIndex;
+  }
 
   // Traverse to next character which is not a digit
   while(isDigit(line[currentParseIndex++]));
