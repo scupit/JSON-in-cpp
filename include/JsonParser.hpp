@@ -10,10 +10,13 @@ enum class ParseType {
   JOBJECT,
   JARRAY,
   JNUMBER,
-  JBOOL,
+  JTRUE,
+  JFALSE,
   JNULL,
   JNEXTITEM,
-  JENDITEM
+  JENDITEM,
+  JENDFILE,
+  JERROR
 };
 
 class JsonParser {
@@ -24,6 +27,7 @@ class JsonParser {
     unsigned int currentParseIndex;
 
     inline bool isDigit(char c) { return c >= '0' && c <= '9'; }
+    bool seqEqLineAtCurrentIndex(const std::string&);
   
   public:
     JsonParser(const std::string&);
@@ -33,13 +37,15 @@ class JsonParser {
     bool currentPositionValid();
     ParseType indicateNextType(const char = '\\');
     void parseArray(JsonValue&);
-    void parseBool(JsonValue&);
-    void parseFloat(JsonValue&);
-    void parseInt(JsonValue&);
+    void parseTrue(JsonValue&);
+    void parseFalse(JsonValue&);
     void parseNull(JsonValue&);
     void parseNumber(JsonValue&);
     void parseObject(JsonValue&);
     void parseString(JsonValue&);
+
+    void setFloat(JsonValue&, const unsigned int, const unsigned int);
+    void setInt(JsonValue&, const unsigned int, const unsigned int);
 };
 
 #endif

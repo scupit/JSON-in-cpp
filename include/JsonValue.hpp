@@ -15,8 +15,7 @@ enum class JsonType {
   JINT,
   JFLOAT,
   JBOOL,
-  JNULL,
-  JINVALID
+  JNULL
 };
 
 // Forward declare JsonValue so the typedefs do not break.
