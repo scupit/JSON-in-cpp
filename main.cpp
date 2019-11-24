@@ -35,11 +35,11 @@ int main(void) {
   //   {"Should be null", nullptr}
   // });
 
-  JsonParser jParser("D:\\Personal_Projects\\Coding\\projects\\c++\\json_parser_2\\cmake_data.json");
-  ofstream fout("D:\\Personal_Projects\\Coding\\projects\\c++\\json_parser_2\\temp.json");
-  fout << jParser.getJsonReference();
-  // cout << jParser.getJsonReference() << endl;
-  fout.close();
+  JsonParser jParser("D:\\Personal_Projects\\Coding\\projects\\c++\\json_parser_2\\temp_json\\FromFile.json");
+  // ofstream fout("D:\\Personal_Projects\\Coding\\projects\\c++\\json_parser_2\\temp_json\\ToFile.json");
+  // fout << jParser.getJsonReference();
+  // fout.close();
 
+  cout << jParser.getJsonReference() << endl;
   return 0;
 }

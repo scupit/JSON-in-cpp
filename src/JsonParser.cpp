@@ -98,7 +98,7 @@ void JsonParser::parseArray(JsonValue& jsonIn) {
   ParseType nextType;
   jsonIn.changeType(JsonType::JARRAY);
 
-  while ((nextType = determineNextType(']')) != ParseType::JENDITEM) {
+  while ((nextType = determineNextType(']')) != ParseType::JENDITEM && nextType != ParseType::JENDFILE) {
     if (nextType != ParseType::JNEXTITEM) {
       jsonIn.getAsVector().push_back(JsonValue());
       parseInto(jsonIn.getAsVector().back(), nextType);
@@ -134,13 +134,13 @@ void JsonParser::parseNull(JsonValue& jsonIn) {
 }
 
 void JsonParser::parseNumber(JsonValue& jsonIn) {
-  const unsigned int initialCharIndex = currentParseIndex;
+  const unsigned int initialCharIndex = currentParseIndex - 1;
 
   // Traverse to next character which is not a digit
   while(isDigit(line[currentParseIndex++]));
 
-  if (line[currentParseIndex] == '.') {
-    while(!isDigit(line[currentParseIndex++]));
+  if (line[currentParseIndex - 1] == '.') {
+    while(isDigit(line[currentParseIndex++]));
     setFloat(jsonIn, initialCharIndex, currentParseIndex - 1);
   }
   else {
@@ -154,7 +154,7 @@ void JsonParser::parseObject(JsonValue& jsonIn) {
   jsonIn.changeType(JsonType::JOBJECT);
 
   // While the next type is not the end of the object
-  while((nextType = determineNextType('}')) != ParseType::JENDITEM) {
+  while((nextType = determineNextType('}')) != ParseType::JENDITEM && nextType != ParseType::JENDFILE) {
     if (nextType == ParseType::JSTRING) {
       // Parses the next item into the JsonObject added to jsonIn.
       const std::string key = parseKey();
