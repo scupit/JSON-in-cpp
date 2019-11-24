@@ -1074,7 +1074,7 @@ JsonValue& JsonValue::operator[](const std::string& key) {
 
   if (valIter == value.objectValue->end()) {
     (*value.objectValue)[key] = JsonValue();
-    return value.objectValue->at("key");
+    return value.objectValue->at(key);
   }
   else {
     return valIter->second;

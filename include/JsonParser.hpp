@@ -31,9 +31,10 @@ class JsonParser {
     void parseInto(JsonValue&, const ParseType);
     std::string parseKey(ParseType&);
     void traverseParseIndexToEndingQuote();
-  
+
   public:
     JsonParser(const std::string&);
+    JsonParser(const std::string&, JsonValue&, const bool = false);
     void parseNewFile(const std::string&);
     void parseNewFile(const std::string&, JsonValue&, const bool = false);
     inline JsonValue getJsonCopy() { return json; }

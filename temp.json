@@ -1,0 +1,93 @@
+{
+	"default_target": "debug",
+	"targets": {
+		"release": {
+			"cpp_flags": [
+				"-O3",
+				"-DNDEBUG",
+				"-s"
+			],
+			"c_flags": [
+				"-O3",
+				"-DNDEBUG",
+				"-s"
+			]
+		},
+		"debug": {
+			"cpp_flags": [
+				"-g",
+				"-Wall",
+				"-Wextra",
+				"-Wconversion",
+				"-Wuninitialized",
+				"-pedantic",
+				"-pedantic-errors"
+			],
+			"c_flags": [
+				"-g",
+				"-Wall",
+				"-Wextra",
+				"-Wconversion",
+				"-Wuninitialized",
+				"-pedantic",
+				"-pedantic-errors"
+			]
+		}
+	},
+	"link_libs": {
+		"json_parser": [
+			"jparser"
+		],
+		"test": [
+			"jparser"
+		]
+	},
+	"imported_libs": { },
+	"project_name": "json_parser_improved",
+	"min_cmake_version": "3.12",
+	"allowed_cpp_standards": [
+		"11"
+	],
+	"output": {
+		"json_parser": {
+			"r_include_dirs": [ ],
+			"r_header_dirs": [ ],
+			"r_source_dirs": [ ],
+			"executable_output_dir": "bin",
+			"type": "executable",
+			"base_file": "main.cpp"
+		},
+		"jparser": {
+			"library_output_dir": "lib",
+			"archive_output_dir": "lib",
+			"type": "static_lib",
+			"r_include_dirs": [
+				"include"
+			],
+			"r_header_dirs": [
+				"include"
+			],
+			"r_source_dirs": [
+				"src"
+			]
+		},
+		"test": {
+			"r_include_dirs": [
+				"testing/include"
+			],
+			"r_header_dirs": [
+				"testing/include"
+			],
+			"r_source_dirs": [
+				"testing/src"
+			],
+			"executable_output_dir": "bin",
+			"type": "executable",
+			"base_file": "testing/test.cpp"
+		}
+	},
+	"default_cpp_standard": "11",
+	"allowed_c_standards": [
+		"11"
+	]
+}

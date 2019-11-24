@@ -1,9 +1,13 @@
 #include "JsonParser.hpp"
 #include <stdexcept>
+#include <iostream>
 
-JsonParser::JsonParser(const std::string& fileName)
-{
+JsonParser::JsonParser(const std::string& fileName) {
   parseNewFile(fileName);
+}
+
+JsonParser::JsonParser(const std::string& fileName, JsonValue& jsonIn, const bool shouldCopyIntoLocalJson) {
+  parseNewFile(fileName, jsonIn, shouldCopyIntoLocalJson);
 }
 
 void JsonParser::parseNewFile(const std::string& fileName) {
@@ -26,7 +30,7 @@ void JsonParser::parseNewFile(const std::string& fileName, JsonValue& jsonIn, co
 void JsonParser::parseInto(JsonValue& jsonIn, const ParseType typeToParse) {
   switch (typeToParse) {
     case ParseType::JSTRING:
-      parseNumber(jsonIn);
+      parseString(jsonIn);
       break;
     case ParseType::JARRAY:
       parseArray(jsonIn);
@@ -95,8 +99,10 @@ void JsonParser::parseArray(JsonValue& jsonIn) {
   jsonIn.changeType(JsonType::JARRAY);
 
   while ((nextType = determineNextType(']')) != ParseType::JENDITEM) {
-    jsonIn.getAsVector().push_back(JsonValue());
-    parseInto(jsonIn.getAsVector().back(), nextType);
+    if (nextType != ParseType::JNEXTITEM) {
+      jsonIn.getAsVector().push_back(JsonValue());
+      parseInto(jsonIn.getAsVector().back(), nextType);
+    }
   }
 }
 
@@ -151,7 +157,8 @@ void JsonParser::parseObject(JsonValue& jsonIn) {
   while((nextType = determineNextType('}')) != ParseType::JENDITEM) {
     if (nextType == ParseType::JSTRING) {
       // Parses the next item into the JsonObject added to jsonIn.
-      parseInto(jsonIn[parseKey(nextType)], nextType);
+      std::string key = parseKey(nextType);
+      parseInto(jsonIn[key], nextType);
     }
   }
 }
@@ -197,7 +204,7 @@ std::string JsonParser::parseKey(ParseType& nextParseType) {
   // Set the next type to be parsed
   nextParseType = determineNextType();
 
-  return line.substr(initialIndex, currentParseIndex - initialIndex);
+  return line.substr(initialIndex, endingQuoteIndex - initialIndex);
 }
 
 bool JsonParser::seqEqLineAtCurrentIndex(const std::string& strToMatch) {
