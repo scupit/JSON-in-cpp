@@ -82,7 +82,16 @@ ParseType JsonParser::determineNextType(const char typeCloseChar) {
   return ParseType::JENDFILE;
 }
 
-void parseArray(JsonValue&);
+void JsonParser::parseArray(JsonValue& jsonIn) {
+  ParseType nextType;
+  jsonIn.changeType(JsonType::JARRAY);
+
+  while ((nextType = determineNextType(']')) != ParseType::JENDITEM) {
+    jsonIn.getAsVector().push_back(JsonValue());
+    parseInto(jsonIn.getAsVector().back(), nextType);
+  }
+}
+
 void JsonParser::parseTrue(JsonValue& jsonIn) {
   if (seqEqLineAtCurrentIndex("rue")) {
     jsonIn = true;
@@ -131,13 +140,12 @@ void JsonParser::parseObject(JsonValue& jsonIn) {
   jsonIn.changeType(JsonType::JOBJECT);
 
   // While the next type is not the end of the object
-  while((nextType = determineNextType()) != ParseType::JENDITEM) {
+  while((nextType = determineNextType('}')) != ParseType::JENDITEM) {
     if (nextType == ParseType::JSTRING) {
       // Parses the next item into the JsonObject added to jsonIn.
       parseInto(jsonIn[parseKey(nextType)], nextType);
     }
   }
-
 }
 
 void JsonParser::parseString(JsonValue& jsonIn) {
