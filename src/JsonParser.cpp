@@ -1,6 +1,5 @@
 #include "JsonParser.hpp"
 #include <stdexcept>
-#include <iostream>
 
 JsonParser::JsonParser(const std::string& fileName) {
   parseNewFile(fileName);
