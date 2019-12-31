@@ -77,6 +77,8 @@ class JsonValue {
     JsonArray& getAsVector();
     JsonObject& getAsMap();
 
+    bool hasOwnProperty(const std::string&);
+
     // This stringify is not recommended.
     std::string stringify();
     

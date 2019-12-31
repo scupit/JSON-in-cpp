@@ -2,10 +2,10 @@
   "min_cmake_version": "3.12",
   "project_name": "json_parser_improved",
 
-  "default_cpp_standard": "11",
+  "default_cpp_standard": "14",
 
   "allowed_c_standards": [ "11" ],
-  "allowed_cpp_standards": [ "11" ],
+  "allowed_cpp_standards": [ "14" ],
 
   "output": {
     "jparser": {
@@ -83,5 +83,5 @@
     }
   },
 
-  "default_target": "debug"
+  "default_target": "release"
 }

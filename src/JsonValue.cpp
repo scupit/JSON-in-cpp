@@ -208,6 +208,13 @@ JsonObject& JsonValue::getAsMap() {
   return *value.objectValue;
 }
 
+bool JsonValue::hasOwnProperty(const std::string& keyName) {
+  if (type != JsonType::JOBJECT) {
+    throw std::runtime_error("Tried to access a property \"" + keyName + "\" of a non-JOBJECT JsonValue");
+  }
+  return value.objectValue->find(keyName) != value.objectValue->end();
+}
+
 std::string JsonValue::stringify() {
   std::string str;
   stringify(str);
