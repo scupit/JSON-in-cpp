@@ -99,8 +99,8 @@ void JsonParser::parseArray(JsonValue& jsonIn) {
 
   while ((nextType = determineNextType(']')) != ParseType::JENDITEM && nextType != ParseType::JENDFILE) {
     if (nextType != ParseType::JNEXTITEM) {
-      jsonIn.getAsVector().push_back(JsonValue());
-      parseInto(jsonIn.getAsVector().back(), nextType);
+      jsonIn.asVector().push_back(JsonValue());
+      parseInto(jsonIn.asVector().back(), nextType);
     }
   }
 }
@@ -112,7 +112,7 @@ void JsonParser::parseTrue(JsonValue& jsonIn) {
   else {
     throw std::runtime_error("Invalid json when parsing for true");
   }
-};
+}
 
 void JsonParser::parseFalse(JsonValue& jsonIn) {
   if (seqEqLineAtCurrentIndex("alse")) {

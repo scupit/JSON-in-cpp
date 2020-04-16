@@ -4,7 +4,7 @@
 #define JFLOAT_TOLERANCE 0.0001
 
 #include <iostream>
-#include <unordered_map>
+#include <map>
 #include <vector>
 
 // Define possible json types
@@ -23,7 +23,7 @@ enum class JsonType {
 class JsonValue;
 
 typedef std::vector<JsonValue> JsonArray;
-typedef std::unordered_map<std::string, JsonValue> JsonObject;
+typedef std::map<std::string, JsonValue> JsonObject;
 
 // Union containing possible data for each type other than JNULL.
 // No need to include null item since it can be inferred from the type anyways.
@@ -59,23 +59,23 @@ class JsonValue {
 
     void changeType(const JsonType);
     bool boolNot();
-    void resetValue();
+    void reset();
     void setNull(void);
-    void setValue(const int);
-    void setValue(const float);
-    void setValue(const bool);
-    void setValue(const char*);
-    void setValue(const std::string&);
-    void setValue(const JsonArray&);
-    void setValue(const JsonObject&);
+    void set(const int);
+    void set(const float);
+    void set(const bool);
+    void set(const char*);
+    void set(const std::string&);
+    void set(const JsonArray&);
+    void set(const JsonObject&);
 
-    std::nullptr_t getAsNull();
-    int getAsInt();
-    float getAsFloat();
-    bool getAsBool();
-    std::string& getAsString();
-    JsonArray& getAsVector();
-    JsonObject& getAsMap();
+    std::nullptr_t asNull();
+    int asInt();
+    float asFloat();
+    bool asBool();
+    std::string& asString();
+    JsonArray& asVector();
+    JsonObject& asMap();
 
     bool hasOwnProperty(const std::string&);
 

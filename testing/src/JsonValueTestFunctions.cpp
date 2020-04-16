@@ -4,11 +4,11 @@
 
 void testBool(JsonValue& jVal) {
   const bool expectedBoolValue = true;
-  jVal.setValue(expectedBoolValue);
+  jVal.set(expectedBoolValue);
 
   printTestResultStatus(
     "Bool value assignment",
-    jVal.getAsBool() == expectedBoolValue
+    jVal.asBool() == expectedBoolValue
   );
 
   printTestResultStatus(
@@ -20,16 +20,16 @@ void testBool(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing type from JBOOL to JBOOL",
-    jVal.getAsBool() == expectedBoolValue && jVal.getType() == JsonType::JBOOL
+    jVal.asBool() == expectedBoolValue && jVal.getType() == JsonType::JBOOL
   );
 
   printTestResultStatus(
     "Getting value using bool getter",
-    jVal.getAsBool() == expectedBoolValue
+    jVal.asBool() == expectedBoolValue
   );
 
   try {
-    int temp = jVal.getAsInt();
+    int temp = jVal.asInt();
     printTestResultStatus(
       "Using getter of wrong type",
       false
@@ -42,11 +42,11 @@ void testBool(JsonValue& jVal) {
     );
   }
 
-  jVal.resetValue();
+  jVal.reset();
 
   printTestResultStatus(
     "Resetting bool value",
-    jVal.getAsBool() == false
+    jVal.asBool() == false
   );
 
   jVal.changeType(JsonType::JSTRING);
@@ -60,17 +60,17 @@ void testBool(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JBOOL from JSTRING",
-    jVal.getType() == JsonType::JBOOL && jVal.getAsBool() == false
+    jVal.getType() == JsonType::JBOOL && jVal.asBool() == false
   );
 }
 
 void testFloat(JsonValue& jVal) {
   const float expectedFloatValue = 10.2f;
-  jVal.setValue(expectedFloatValue);
+  jVal.set(expectedFloatValue);
 
   printTestResultStatus(
     "Float value assignment",
-    jVal.getAsFloat() == expectedFloatValue
+    jVal.asFloat() == expectedFloatValue
   );
 
   printTestResultStatus(
@@ -82,16 +82,16 @@ void testFloat(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing type from JFLOAT to JFLOAT",
-    jVal.getAsFloat() == expectedFloatValue && jVal.getType() == JsonType::JFLOAT
+    jVal.asFloat() == expectedFloatValue && jVal.getType() == JsonType::JFLOAT
   );
 
   printTestResultStatus(
     "Getting value using float getter",
-    jVal.getAsFloat() == expectedFloatValue
+    jVal.asFloat() == expectedFloatValue
   );
 
   try {
-    int temp = jVal.getAsInt();
+    int temp = jVal.asInt();
     printTestResultStatus(
       "Using getter of wrong type",
       false
@@ -104,11 +104,11 @@ void testFloat(JsonValue& jVal) {
     );
   }
 
-  jVal.resetValue();
+  jVal.reset();
 
   printTestResultStatus(
     "Resetting float value",
-    jVal.getAsFloat() == 0.0f
+    jVal.asFloat() == 0.0f
   );
 
   jVal.changeType(JsonType::JSTRING);
@@ -122,17 +122,17 @@ void testFloat(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JFLOAT from JSTRING",
-    jVal.getType() == JsonType::JFLOAT && jVal.getAsFloat() == 0.0f
+    jVal.getType() == JsonType::JFLOAT && jVal.asFloat() == 0.0f
   );
 }
 
 void testInt(JsonValue& jVal) {
   const int expectedIntValue = -123;
-  jVal.setValue(expectedIntValue);
+  jVal.set(expectedIntValue);
 
   printTestResultStatus(
     "Int value assignment",
-    jVal.getAsInt() == expectedIntValue
+    jVal.asInt() == expectedIntValue
   );
 
   printTestResultStatus(
@@ -144,16 +144,16 @@ void testInt(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing type from JINT to JINT",
-    jVal.getAsInt() == expectedIntValue && jVal.getType() == JsonType::JINT
+    jVal.asInt() == expectedIntValue && jVal.getType() == JsonType::JINT
   );
 
   printTestResultStatus(
     "Getting value using int getter",
-    jVal.getAsInt() == expectedIntValue
+    jVal.asInt() == expectedIntValue
   );
 
   try {
-    std::string& temp = jVal.getAsString();
+    std::string& temp = jVal.asString();
     printTestResultStatus(
       "Using getter of wrong type",
       false
@@ -166,11 +166,11 @@ void testInt(JsonValue& jVal) {
     );
   }
 
-  jVal.resetValue();
+  jVal.reset();
 
   printTestResultStatus(
     "Resetting int value",
-    jVal.getAsInt() == 0
+    jVal.asInt() == 0
   );
 
   jVal.changeType(JsonType::JSTRING);
@@ -184,17 +184,17 @@ void testInt(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JINT from JSTRING",
-    jVal.getType() == JsonType::JINT && jVal.getAsInt() == 0
+    jVal.getType() == JsonType::JINT && jVal.asInt() == 0
   );
 }
   
 void testString(JsonValue& jVal) {
   const std::string expectedStringValue = "Very noice test string";
-  jVal.setValue(expectedStringValue);
+  jVal.set(expectedStringValue);
 
   printTestResultStatus(
     "String value assignment",
-    jVal.getAsString() == expectedStringValue
+    jVal.asString() == expectedStringValue
   );
 
   printTestResultStatus(
@@ -206,16 +206,16 @@ void testString(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing type from JSTRING to JSTRING",
-    jVal.getAsString() == expectedStringValue && jVal.getType() == JsonType::JSTRING
+    jVal.asString() == expectedStringValue && jVal.getType() == JsonType::JSTRING
   );
 
   printTestResultStatus(
     "Getting value using std::string getter",
-    jVal.getAsString() == expectedStringValue
+    jVal.asString() == expectedStringValue
   );
 
   try {
-    JsonArray& temp = jVal.getAsVector();
+    JsonArray& temp = jVal.asVector();
     printTestResultStatus(
       "Using getter of wrong type",
       false
@@ -228,11 +228,11 @@ void testString(JsonValue& jVal) {
     );
   }
 
-  jVal.resetValue();
+  jVal.reset();
 
   printTestResultStatus(
     "Resetting string value",
-    jVal.getAsString() == ""
+    jVal.asString() == ""
   );
 
   jVal.changeType(JsonType::JSTRING);
@@ -246,7 +246,7 @@ void testString(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JSTRING from JSTRING",
-    jVal.getType() == JsonType::JSTRING && jVal.getAsString() == ""
+    jVal.getType() == JsonType::JSTRING && jVal.asString() == ""
   );
 }
 
@@ -258,12 +258,12 @@ void testArray(JsonValue& jVal) {
     jVal.getType() == JsonType::JARRAY
   );
 
-  jVal.getAsVector().emplace_back(10);
-  jVal.getAsVector().emplace_back(10.2f);
+  jVal.asVector().emplace_back(10);
+  jVal.asVector().emplace_back(10.2f);
 
   printTestResultStatus(
     "Adding two JsonValues to the array (array size)",
-    jVal.getAsVector().size() == 2
+    jVal.asVector().size() == 2
   );
 
   printTestResultStatus(
@@ -273,29 +273,29 @@ void testArray(JsonValue& jVal) {
 
   printTestResultStatus(
     "Adding two JsonValues to the array (item 1 type)",
-    jVal.getAsVector().at(0).getType() == JsonType::JINT
+    jVal.asVector().at(0).getType() == JsonType::JINT
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the array (item 1 type)",
-    jVal.getAsVector().at(0).getAsInt() == 10
+    jVal.asVector().at(0).asInt() == 10
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the array (item 2 type)",
-    jVal.getAsVector().at(1).getType() == JsonType::JFLOAT
+    jVal.asVector().at(1).getType() == JsonType::JFLOAT
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the array (item 2 value)",
-    jVal.getAsVector().at(1).getAsFloat() == 10.2f
+    jVal.asVector().at(1).asFloat() == 10.2f
   );
 
   jVal.changeType(JsonType::JARRAY);
 
   printTestResultStatus(
     "Changing type from JARRAY to JARRAY (correct length)",
-    jVal.getAsVector().size() == 2
+    jVal.asVector().size() == 2
   );
 
   printTestResultStatus(
@@ -305,11 +305,11 @@ void testArray(JsonValue& jVal) {
 
   printTestResultStatus(
     "Getting value using JsonArray getter",
-    jVal.getAsVector().size() == 2
+    jVal.asVector().size() == 2
   );
 
   try {
-    JsonObject& temp = jVal.getAsMap();
+    JsonObject& temp = jVal.asMap();
     printTestResultStatus(
       "Using getter of wrong type",
       false
@@ -322,11 +322,11 @@ void testArray(JsonValue& jVal) {
     );
   }
 
-  jVal.resetValue();
+  jVal.reset();
 
   printTestResultStatus(
     "Resetting int value",
-    jVal.getAsVector().empty()
+    jVal.asVector().empty()
   );
 
   jVal.changeType(JsonType::JARRAY);
@@ -340,7 +340,7 @@ void testArray(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JARRAY from JARRAY",
-    jVal.getType() == JsonType::JARRAY && jVal.getAsVector().empty()
+    jVal.getType() == JsonType::JARRAY && jVal.asVector().empty()
   );
 }
 
@@ -352,12 +352,12 @@ void testObject(JsonValue& jVal) {
     jVal.getType() == JsonType::JOBJECT
   );
 
-  jVal.getAsMap()["theInt"] = JsonValue(10);
-  jVal.getAsMap()["theFloat"] = JsonValue(10.2f);
+  jVal.asMap()["theInt"] = JsonValue(10);
+  jVal.asMap()["theFloat"] = JsonValue(10.2f);
 
   printTestResultStatus(
     "Adding two JsonValues to the map (size)",
-    jVal.getAsMap().size() == 2
+    jVal.asMap().size() == 2
   );
 
   printTestResultStatus(
@@ -367,29 +367,29 @@ void testObject(JsonValue& jVal) {
 
   printTestResultStatus(
     "Adding two JsonValues to the map (item 1 type)",
-    jVal.getAsMap().at("theInt").getType() == JsonType::JINT
+    jVal.asMap().at("theInt").getType() == JsonType::JINT
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the map (item 1 value)",
-    jVal.getAsMap().at("theInt").getAsInt() == 10
+    jVal.asMap().at("theInt").asInt() == 10
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the map (item 2 type)",
-    jVal.getAsMap().at("theFloat").getType() == JsonType::JFLOAT
+    jVal.asMap().at("theFloat").getType() == JsonType::JFLOAT
   );
 
   printTestResultStatus(
     "Adding two JsonValues to the map (item 2 value)",
-    jVal.getAsMap().at("theFloat").getAsFloat() == 10.2f
+    jVal.asMap().at("theFloat").asFloat() == 10.2f
   );
 
   jVal.changeType(JsonType::JOBJECT);
 
   printTestResultStatus(
     "Changing type from JOBJECT to JOBJECT (correct size)",
-    jVal.getAsMap().size() == 2
+    jVal.asMap().size() == 2
   );
 
   printTestResultStatus(
@@ -399,11 +399,11 @@ void testObject(JsonValue& jVal) {
 
   printTestResultStatus(
     "Getting value using JsonArray getter",
-    jVal.getAsMap().size() == 2
+    jVal.asMap().size() == 2
   );
 
   try {
-    float temp = jVal.getAsFloat();
+    float temp = jVal.asFloat();
     printTestResultStatus(
       "Using getter of wrong type",
       false
@@ -416,11 +416,11 @@ void testObject(JsonValue& jVal) {
     );
   }
 
-  jVal.resetValue();
+  jVal.reset();
 
   printTestResultStatus(
     "Resetting int value",
-    jVal.getAsMap().empty()
+    jVal.asMap().empty()
   );
 
   jVal.changeType(JsonType::JOBJECT);
@@ -434,6 +434,6 @@ void testObject(JsonValue& jVal) {
 
   printTestResultStatus(
     "Changing back to JOBJECT from JOBJECT",
-    jVal.getType() == JsonType::JOBJECT && jVal.getAsMap().empty()
+    jVal.getType() == JsonType::JOBJECT && jVal.asMap().empty()
   );
 }

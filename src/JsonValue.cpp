@@ -85,7 +85,7 @@ void JsonValue::changeType(const JsonType newType) {
   }
 }
 
-void JsonValue::resetValue() {
+void JsonValue::reset() {
   destroyCurrentValue();
   typeChangeHelper(type);
 }
@@ -97,7 +97,7 @@ void JsonValue::setNull(void) {
   type = JsonType::JNULL;
 }
 
-void JsonValue::setValue(const int newIntValue) {
+void JsonValue::set(const int newIntValue) {
   if (type != JsonType::JINT) {
     destroyCurrentValue();
   }
@@ -105,7 +105,7 @@ void JsonValue::setValue(const int newIntValue) {
   type = JsonType::JINT;
 }
 
-void JsonValue::setValue(const float newFloatValue) {
+void JsonValue::set(const float newFloatValue) {
   if (type != JsonType::JFLOAT) {
     destroyCurrentValue();
   }
@@ -113,7 +113,7 @@ void JsonValue::setValue(const float newFloatValue) {
   type = JsonType::JFLOAT;
 }
 
-void JsonValue::setValue(const bool newBoolValue) {
+void JsonValue::set(const bool newBoolValue) {
   if (type != JsonType::JBOOL) {
     destroyCurrentValue();
   }
@@ -121,7 +121,7 @@ void JsonValue::setValue(const bool newBoolValue) {
   type = JsonType::JBOOL;
 }
 
-void JsonValue::setValue(const char* newStringValue) {
+void JsonValue::set(const char* newStringValue) {
   if (type != JsonType::JSTRING) {
     destroyCurrentValue();
     value.stringValue = new std::string(newStringValue);
@@ -131,7 +131,7 @@ void JsonValue::setValue(const char* newStringValue) {
   type = JsonType::JSTRING;
 }
 
-void JsonValue::setValue(const std::string& newStringValue) {
+void JsonValue::set(const std::string& newStringValue) {
   if (type != JsonType::JSTRING) {
     destroyCurrentValue();
     value.stringValue = new std::string(newStringValue);
@@ -141,7 +141,7 @@ void JsonValue::setValue(const std::string& newStringValue) {
   type = JsonType::JSTRING;
 }
 
-void JsonValue::setValue(const JsonArray& newArrayValue) {
+void JsonValue::set(const JsonArray& newArrayValue) {
   if (type != JsonType::JARRAY) {
     destroyCurrentValue();
     value.arrayValue = new JsonArray(newArrayValue);
@@ -150,7 +150,7 @@ void JsonValue::setValue(const JsonArray& newArrayValue) {
   type = JsonType::JARRAY;
 }
 
-void JsonValue::setValue(const JsonObject& newObjectValue) {
+void JsonValue::set(const JsonObject& newObjectValue) {
   if (type != JsonType::JOBJECT) {
     destroyCurrentValue();
     value.objectValue = new JsonObject(newObjectValue);
@@ -159,51 +159,51 @@ void JsonValue::setValue(const JsonObject& newObjectValue) {
   type = JsonType::JOBJECT;
 }
 
-std::nullptr_t JsonValue::getAsNull() {
+std::nullptr_t JsonValue::asNull() {
   if (type != JsonType::JNULL) {
     throw std::runtime_error("Tried to get JsonValue value as null (nullptr), when it it not of type JNULL");
   }
   return nullptr;
 }
 
-int JsonValue::getAsInt() {
+int JsonValue::asInt() {
   if (type != JsonType::JINT) {
     throw std::runtime_error("Tried to get JsonValue value as int, when it is not type JINT");
   }
   return value.intValue;
 }
 
-float JsonValue::getAsFloat() {
+float JsonValue::asFloat() {
   if (type != JsonType::JFLOAT) {
     throw std::runtime_error("Tried to get JsonValue value as float, when it is not type JFLOAT");
   }
   return value.floatValue;
 }
 
-bool JsonValue::getAsBool() {
+bool JsonValue::asBool() {
   if (type != JsonType::JBOOL) {
     throw std::runtime_error("Tried to get JsonValue value as bool, when it is not type JBOOL");
   }
   return value.boolValue;
 }
 
-std::string& JsonValue::getAsString() {
+std::string& JsonValue::asString() {
   if (type != JsonType::JSTRING) {
     throw std::runtime_error("Tried to get JsonValue value as std::string, when it is not type JSTRING.");
   }
   return *value.stringValue;
 }
 
-JsonArray& JsonValue::getAsVector() {
+JsonArray& JsonValue::asVector() {
   if (type != JsonType::JARRAY) {
     throw std::runtime_error("Tried to get JsonValue value as JsonArray (std::vector), when it is not type JARRAY.");
   }
   return *value.arrayValue;
 }
 
-JsonObject& JsonValue::getAsMap() {
+JsonObject& JsonValue::asMap() {
   if (type != JsonType::JOBJECT) {
-    throw std::runtime_error("Tried to get JsonValue value as JsonObject (std::unordered_map), when it is not type JOBJECT.");
+    throw std::runtime_error("Tried to get JsonValue value as JsonObject (std::map), when it is not type JOBJECT.");
   }
   return *value.objectValue;
 }
@@ -238,22 +238,22 @@ bool JsonValue::typeMatches(const JsonValue& other) const {
 JsonValue& JsonValue::operator=(const JsonValue& other) {
   switch (other.type) {
     case JsonType::JSTRING:
-      setValue(*other.value.stringValue);
+      set(*other.value.stringValue);
       break;
     case JsonType::JARRAY:
-      setValue(*other.value.arrayValue);
+      set(*other.value.arrayValue);
       break;
     case JsonType::JOBJECT:
-      setValue(*other.value.objectValue);
+      set(*other.value.objectValue);
       break;
     case JsonType::JINT:
-      setValue(other.value.intValue);
+      set(other.value.intValue);
       break;
     case JsonType::JFLOAT:
-      setValue(other.value.floatValue);
+      set(other.value.floatValue);
       break;
     case JsonType::JBOOL:
-      setValue(other.value.boolValue);
+      set(other.value.boolValue);
       break;
     default:
       type = other.type;
@@ -263,37 +263,37 @@ JsonValue& JsonValue::operator=(const JsonValue& other) {
 }
 
 int JsonValue::operator=(const int newIntValue) {
-  setValue(newIntValue);
+  set(newIntValue);
   return newIntValue;
 }
 
 float JsonValue::operator=(const float newFloatValue) {
-  setValue(newFloatValue);
+  set(newFloatValue);
   return newFloatValue;
 }
 
 const char* JsonValue::operator=(const char* newStringValue) {
-  setValue(newStringValue);
+  set(newStringValue);
   return newStringValue;
 }
 
 bool JsonValue::operator=(const bool newBoolValue) {
-  setValue(newBoolValue);
+  set(newBoolValue);
   return newBoolValue;
 }
 
 std::string& JsonValue::operator=(std::string& newStringValue) {
-  setValue(newStringValue);
+  set(newStringValue);
   return newStringValue;
 }
 
 const JsonArray& JsonValue::operator=(const JsonArray& newArrayValue) {
-  setValue(newArrayValue);
+  set(newArrayValue);
   return newArrayValue;
 }
 
 const JsonObject& JsonValue::operator=(const JsonObject& newObjectValue) {
-  setValue(newObjectValue);
+  set(newObjectValue);
   return newObjectValue;
 }
 
@@ -374,7 +374,7 @@ bool JsonValue::operator==(const JsonArray& otherArrayValue) const {
 
 bool JsonValue::operator==(const JsonObject& otherObjectValue) const {
   if (type != JsonType::JOBJECT) {
-    throw std::runtime_error("Attempted to check if JsonObject (std::unordered_map) is equal to a JsonValue not of type JOBJECT");
+    throw std::runtime_error("Attempted to check if JsonObject (std::map) is equal to a JsonValue not of type JOBJECT");
   }
   return *value.objectValue == otherObjectValue;
 }
@@ -705,7 +705,7 @@ JsonValue& JsonValue::operator+=(const float fp) {
       value.floatValue += fp;
       break;
     case JsonType::JINT:
-      setValue(static_cast<float>(value.intValue) + fp);
+      set(static_cast<float>(value.intValue) + fp);
       break;
     default:
       throw std::runtime_error("Attempted to add a float to a non-numeric JsonValue");
@@ -803,7 +803,7 @@ JsonValue& JsonValue::operator-=(const float fp) {
       value.floatValue -= fp;
       return *this;
     case JsonType::JINT:
-      setValue(static_cast<float>(value.intValue) - fp);
+      set(static_cast<float>(value.intValue) - fp);
       return *this;
     default:
       throw std::runtime_error("Attempted to subtract a float from a non-numeric JsonValue");
@@ -887,7 +887,7 @@ JsonValue& JsonValue::operator*=(const float fp) {
       value.floatValue *= fp;
       break;
     case JsonType::JINT:
-      setValue(static_cast<float>(value.intValue) * fp);
+      set(static_cast<float>(value.intValue) * fp);
       break;
     default:
       throw std::runtime_error("Attempted to multiply and assign a JsonValue of incompatible type by a float");
@@ -972,7 +972,7 @@ JsonValue& JsonValue::operator/=(const float fp) {
       value.floatValue /= fp;
       break;
     case JsonType::JINT:
-      setValue(static_cast<float>(value.intValue) / fp);
+      set(static_cast<float>(value.intValue) / fp);
       break;
     default:
       throw std::runtime_error("Attempted to divide and assign a JsonValue of incompatible type by a float");
@@ -1044,7 +1044,7 @@ JsonValue& JsonValue::operator%=(const int integer) {
       value.intValue %= integer;
       break;
     case JsonType::JFLOAT:
-      setValue(std::fmod(value.floatValue, static_cast<float>(integer)));
+      set(std::fmod(value.floatValue, static_cast<float>(integer)));
       break;
     default:
       throw std::runtime_error("Attempted to mod a non-numeric JsonValue by an int");
@@ -1055,10 +1055,10 @@ JsonValue& JsonValue::operator%=(const int integer) {
 JsonValue& JsonValue::operator%=(const float fp) {
   switch (type) {
     case JsonType::JFLOAT:
-      setValue(std::fmod(value.floatValue, fp));
+      set(std::fmod(value.floatValue, fp));
       break;
     case JsonType::JINT:
-      setValue(std::fmod(static_cast<float>(value.intValue), fp));
+      set(std::fmod(static_cast<float>(value.intValue), fp));
       break;
     default:
       throw std::runtime_error("Attempted to mod a non-numeric JsonValue by a float");

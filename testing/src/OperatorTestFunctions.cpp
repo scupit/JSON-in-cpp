@@ -14,7 +14,7 @@ void testEqualsOperators(JsonValue& jVal) {
   printTestResultStatus(
     "Assigning to int",
     jVal.getType() == JsonType::JINT
-      && jVal.getAsInt() == -123
+      && jVal.asInt() == -123
   );
 
   jVal = 10.2f;
@@ -22,7 +22,7 @@ void testEqualsOperators(JsonValue& jVal) {
   printTestResultStatus(
     "Assigning to float",
     jVal.getType() == JsonType::JFLOAT
-      && jVal.getAsFloat() == 10.2f
+      && jVal.asFloat() == 10.2f
   );
 
   jVal = "A noice string";
@@ -30,7 +30,7 @@ void testEqualsOperators(JsonValue& jVal) {
   printTestResultStatus(
     "Assigning to string",
     jVal.getType() == JsonType::JSTRING
-      && jVal.getAsString() == "A noice string"
+      && jVal.asString() == "A noice string"
   );
 
 
@@ -43,10 +43,10 @@ void testEqualsOperators(JsonValue& jVal) {
 
   printTestResultStatus(
     "Assigning to brace-initialized array (value check)",
-    jVal[0].getAsInt() == 12
-      && jVal[1].getAsString() == "good string"
-      && jVal[2].getAsInt() == -109
-      && jVal[3].getAsFloat() == 104.5f
+    jVal[0].asInt() == 12
+      && jVal[1].asString() == "good string"
+      && jVal[2].asInt() == -109
+      && jVal[3].asFloat() == 104.5f
   );
 
   jVal = {
@@ -54,7 +54,7 @@ void testEqualsOperators(JsonValue& jVal) {
     {"boolean", true},
     {"null", nullptr},
     {"string", "good string"},
-    {"array", jVal.getAsVector()}
+    {"array", jVal.asVector()}
   };
 
   printTestResultStatus(
@@ -64,12 +64,12 @@ void testEqualsOperators(JsonValue& jVal) {
 
   printTestResultStatus(
     "Assigning to brace-initialized map (value check)",
-    jVal["integer"].getAsInt() == -123
-      && jVal["boolean"].getAsBool()
+    jVal["integer"].asInt() == -123
+      && jVal["boolean"].asBool()
       && jVal["null"].getType() == JsonType::JNULL
-      && jVal["string"].getAsString() == "good string"
-      && jVal["array"][1].getAsString() == "good string"
-      && jVal["array"][3].getAsFloat() == 104.5f 
+      && jVal["string"].asString() == "good string"
+      && jVal["array"][1].asString() == "good string"
+      && jVal["array"][3].asFloat() == 104.5f 
   );
 
   jVal.setNull();
@@ -224,22 +224,22 @@ void testBoolEqualityOperators(JsonValue& jVal) {
   jVal = aMap;
 
   printTestResultStatus(
-    "JsonObject (unordered_map) equality",
+    "JsonObject (map) equality",
     jVal == aMap
   );
 
   printTestResultStatus(
-    "JsonObject (unordered_map) equality",
+    "JsonObject (map) equality",
     aMap == jVal
   );
 
   printTestResultStatus(
-    "JsonObject (unordered_map) inequality",
+    "JsonObject (map) inequality",
     jVal != otherMap
   );
 
   printTestResultStatus(
-    "JsonObject (unordered_map) inequality",
+    "JsonObject (map) inequality",
     otherMap != jVal
   );
 }
