@@ -1,65 +1,41 @@
 {
-  "min_cmake_version": "3.12",
-  "project_name": "json_parser_improved",
+  "projectName": "json_parser_improved",
 
-  "default_cpp_standard": "14",
-
-  "allowed_c_standards": [ "11" ],
-  "allowed_cpp_standards": [ "14" ],
+  "defaultCppStandard": "14",
+  "supportedCppStandards": [
+    "14",
+    "17"
+  ],
 
   "output": {
-    "jparser": {
-      "type": "static_lib",
-      "r_source_dirs": [ "src" ],
-      "r_header_dirs": [ "include" ],
-      "r_include_dirs":[ "include" ],
-      "archive_output_dir": "lib",
-      "library_output_dir": "lib"
+    "json_parser": {
+      "type": "executable",
+      "mainFile": "main.cpp"
     },
-    "jparser_shared": {
-      "type": "shared_lib",
-      "r_source_dirs": [ "src" ],
-      "r_header_dirs": [ "include" ],
-      "r_include_dirs": [ "include" ],
-      "archive_output_dir": "lib",
-      "library_output_dir": "lib"
+    "jparser": {
+      "type": "staticLib",
+      "canToggleType": true,
+      "rSourceDirs": [ "src" ],
+      "rHeaderDirs": [ "include" ],
+      "includeDirs":[ "include" ]
     },
     "test": {
       "type": "executable",
-      "base_file": "testing/test.cpp",
-      "r_source_dirs": [ "testing/src" ],
-      "r_header_dirs": [ "testing/include" ],
-      "r_include_dirs": [ "testing/include" ],
-      "executable_output_dir": "bin"
-    },
-    "json_parser": {
-      "type": "executable",
-      "base_file": "main.cpp",
-      "r_source_dirs": [ ],
-      "r_header_dirs": [ ],
-      "r_include_dirs": [ ],
-      "executable_output_dir": "bin"
+      "mainFile": "testing/test.cpp",
+      "rSourceDirs": [ "testing/src" ],
+      "rHeaderDirs": [ "testing/include" ],
+      "rIncludeDirs": [ "testing/include" ]
     }
   },
 
-  "imported_libs": {},
-  "link_libs": {
+  "links": {
     "test": [ "jparser" ],
     "json_parser": [ "jparser" ]
   },
 
-  "targets": {
-    "debug": {
-      "c_flags": [
-        "-g",
-        "-Wall",
-        "-Wextra",
-        "-Wconversion",
-        "-Wuninitialized",
-        "-pedantic",
-        "-pedantic-errors"
-      ],
-      "cpp_flags": [
+  "buildTargets": {
+    "Debug": {
+      "compilerFlags": [
         "-g",
         "-Wall",
         "-Wextra",
@@ -69,19 +45,14 @@
         "-pedantic-errors"
       ]
     },
-    "release": {
-      "c_flags": [
-        "-O3",
-        "-DNDEBUG",
+    "Release": {
+      "compilerFlags": [
+        "-O2",
         "-s"
       ],
-      "cpp_flags": [
-        "-O3",
-        "-DNDEBUG",
-        "-s"
+      "defines": [
+        "NDEBUG"
       ]
     }
-  },
-
-  "default_target": "release"
+  }
 }
